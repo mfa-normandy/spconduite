@@ -1,47 +1,47 @@
 {
     "expConduite": [{
-      "idExpConduite": 0,
-    "conducteur": "élève1",
-    "accompagnant": "accompagnant1",
-    "véhicule": "308SW",
+        "idExpConduite": 0,
+        "conducteur": "élève1",
+        "accompagnant": "accompagnant1",
+        "véhicule": "308SW",
         "boite": "manuelle",
-    "idConditionMeteo": 7,
-    "dateEtHeure": {
-      "départ": "2024-03-05T15:00:00.000Z",
-      "arrivée": "2024-03-05T16:00:00.000Z"
-    },
-    "kilometrage": {
-      "avant": "0",
-      "apres": "123"
-    },
-    "kilometres": 123,
-    "traffic": "intense",
-      "environnement":"urbain",
-    "exerciceStationnementEpi": true,
-    "exerciceStationnementBataille": false,
-    "exerciceStationnementCreneau": true
-    },
-    {
-      "idExpConduite": 1,
-    "conducteur": "élève1",
-    "accompagnant": "accompagnant2",
-    "véhicule": "Leon DSG7",
-      "boite": "automatique",
-    "idConditionMeteo": 3,
-    "dateEtHeure": {
-      "départ": "2024-03-06T15:00:00.000Z",
-      "arrivée": "2024-03-06T16:00:00.000Z"
-    },
-    "kilometrage": {
-      "avant": "123",
-      "apres": "223"
-    },
-    "kilometres": 100,
-    "traffic": "modéré",
-      "environnement":"mixte",
-    "exerciceStationnementEpi": false,
-    "exerciceStationnementBataille": false,
-    "exerciceStationnementCreneau": true
-    }
+        "idConditionMeteo": 7,
+        "dateEtHeure": {
+            "départ": "2024-03-05T15:00:00.000Z",
+            "arrivée": "2024-03-05T16:00:00.000Z"
+        },
+        "kilometrage": {
+            "avant": "0",
+            "apres": "123"
+        },
+        "kilometres": 123,
+        "traffic": "intense",
+        "environnement":"urbain",
+        "exerciceStationnementEpi": true,
+        "exerciceStationnementBataille": false,
+        "exerciceStationnementCreneau": true
+        },
+        {
+        "idExpConduite": 1,
+        "conducteur": "élève1",
+        "accompagnant": "accompagnant2",
+        "véhicule": "Leon DSG7",
+        "boite": "automatique",
+        "idConditionMeteo": 3,
+        "dateEtHeure": {
+            "départ": "2024-03-06T15:00:00.000Z",
+            "arrivée": "2024-03-06T16:00:00.000Z"
+        },
+        "kilometrage": {
+            "avant": "123",
+            "apres": "223"
+        },
+        "kilometres": 100,
+        "traffic": "modéré",
+        "environnement":"mixte",
+        "exerciceStationnementEpi": false,
+        "exerciceStationnementBataille": false,
+        "exerciceStationnementCreneau": true
+        }
     ]
   }
