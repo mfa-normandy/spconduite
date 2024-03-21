@@ -1,0 +1,12 @@
+{
+    "meteo":[
+        {"meteoId":0, "temps":"Clair"},
+        {"meteoId":1, "temps" : "Nuageux"},
+        {"meteoId":2, "temps":"Couvert"},
+        {"meteoId":3, "temps" : "Pluvieux"},
+        {"meteoId":4, "temps":"Brumeux"},
+        {"meteoId":5, "temps" : "Neigeux"},
+        {"meteoId":6, "temps":"Orageux"},
+        {"meteoId":7, "temps" : "Tempetueux"}
+    ]
+}

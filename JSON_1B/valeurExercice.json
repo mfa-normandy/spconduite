@@ -1,0 +1,6 @@
+{"exercices":[
+    {"exerciceId":0, "exerciceNom": "Stationnement en épi"},
+    {"exerciceId":1, "exerciceNom":"Stationnement en bataille"},
+    {"exerciceId":2, "exerciceNom":"Stationnement en créneau"}
+]
+}
