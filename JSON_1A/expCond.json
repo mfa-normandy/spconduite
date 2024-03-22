@@ -1,47 +1,52 @@
 {
-    "expConduite": [{
-      "idExpConduite": 0,
-    "conducteur": "élève1",
-    "accompagnant": "accompagnant1",
-    "véhicule": "308SW",
-        "boite": "manuelle",
-    "idConditionMeteo": 7,
-    "dateEtHeure": {
-      "départ": "2024-03-05T15:00:00.000Z",
-      "arrivée": "2024-03-05T16:00:00.000Z"
+  "trajets": [{
+    "idTrajet": 0,
+    "idConducteur": 0,
+    "accompagnateur": 5,
+    "durée": {
+      "heureDépart": "2024-03-05T15:00:00.000Z",
+      "heureFin": "2024-03-05T16:00:00.000Z"
     },
-    "kilometrage": {
-      "avant": "0",
-      "apres": "123"
+    "véhicule": {
+      "nom": "308SW",
+      "boite": "manuelle"
     },
     "kilometres": 123,
-    "traffic": "intense",
-      "environnement":"urbain",
-    "exerciceStationnementEpi": true,
-    "exerciceStationnementBataille": false,
-    "exerciceStationnementCreneau": true
+    "conditions": {
+      "idConditionMeteo": 3,
+      "idTypeRoute": 2,
+      "idTypeTraffic": 1
     },
-    {
-      "idExpConduite": 1,
-    "conducteur": "élève1",
-    "accompagnant": "accompagnant2",
-    "véhicule": "Leon DSG7",
-      "boite": "automatique",
-    "idConditionMeteo": 3,
-    "dateEtHeure": {
-      "départ": "2024-03-06T15:00:00.000Z",
-      "arrivée": "2024-03-06T16:00:00.000Z"
-    },
-    "kilometrage": {
-      "avant": "123",
-      "apres": "223"
-    },
-    "kilometres": 100,
-    "traffic": "modéré",
-      "environnement":"mixte",
-    "exerciceStationnementEpi": false,
-    "exerciceStationnementBataille": false,
-    "exerciceStationnementCreneau": true
-    }
+    "exercicesRéalisés": [{
+        "idExercice": 0
+      },
+      {
+        "idExercice": 1
+      }
     ]
+  },
+  {
+    "idTrajet": 1,
+    "idConducteur": 0,
+    "accompagnateur": 2,
+    "durée": {
+      "heureDépart": "2024-03-06T15:00:00.000Z",
+      "heureFin": "2024-03-06T16:00:00.000Z"
+    },
+    "véhicule": {
+      "nom": "Leon5F",
+      "boite": "automatique"
+    },
+    "kilometres": 107,
+    "conditions": {
+      "idConditionMeteo": 1,
+      "idTypeRoute": 1,
+      "idTypeTraffic": 0
+    },
+    "exercicesRéalisés": [{
+        "idExercice": 2
+      }
+    ] 
   }
+]
+}
