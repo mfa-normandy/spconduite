@@ -1,0 +1,59 @@
+{
+    "conducteurs":[{
+        "conducteurId":0,
+        "nom":"Buisson",
+        "prenom":"Patrick",
+        "mail":"patrickbuisson@mail.com",
+        "telephone":"06 66 66 66 67",
+        "motDePasse":"Patrickbuisson05971",
+        "entretiensObligatoires":[{
+            "idEntretien":0,
+            "dateEntretien":"2024-02-11T15:30:00.000Z",
+            "nomEnseignant":"Boissière",
+            "prenomEnseignant": "Sylvie",
+            "agence":"Boissière Routière"
+        }],
+        "accompagnateurs":"Marie Buisson",
+        "vehiculeEnregistres":"AN-154-TS",
+        "listeTrajets":[
+            {
+            "conducteurId":0,
+            "trajetId" : 0,
+            "date": {"dateDebut":"2024-03-13T13:00:00.000Z", "dateFin": "2024-03-13T13:30:00.000Z"}, 
+            "duree": "PT30M", 
+            "km": 30,
+            "conditions": [
+                {
+                "meteoId":0,
+                "typeRouteId":0,
+                "traficId":0
+            }
+            ],
+            "exerciceId":[0],
+            "accompagnateur":"Marie Buisson",
+            "vehicule":"AN-154-TS"
+            },
+            {
+            "conducteurId": 0,
+            "trajetId": 1,
+            "date": {
+                "dateDebut": "2024-03-13T15:00:00.000Z",
+                "dateFin": "2024-03-13T16:00:00.000Z"
+            },
+            "duree": "PT1H",
+            "km": 40,
+            "conditions": [
+                {
+                "meteoId":2,
+                "typeRouteId":1,
+                "traficId":2
+            }
+            ],
+            "exerciceId":[0,1],
+            "accompagnateur":"Marie Buisson",
+            "vehicule":"AN-154-TS"
+        }
+        ]
+        }
+    ]
+}
