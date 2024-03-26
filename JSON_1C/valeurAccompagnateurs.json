@@ -1,4 +1,4 @@
-{"accompagnateurs":[{
+{
     "accompagnateurId":0,
     "nom":"Buisson",
     "prenom":"Marie",
@@ -9,5 +9,4 @@
     "documentAccordAssureur": "./assurances/assuranceBuisson.pdf",
     "casierVierge":true,
     "documentCasierVierge":"./casiers/extraitCasierBuisson.pdf"
-}]
 }
