@@ -1,0 +1,8 @@
+{
+    "trafic":[
+        {"traficId":0, "typeTrafic":"Faible"},
+        {"traficId":1, "typeTrafic":"Modéré"},
+        {"traficId":2, "typeTrafic":"Fort"},
+        {"traficId":3, "typeTrafic":"Fluctuant"}
+    ]
+}
