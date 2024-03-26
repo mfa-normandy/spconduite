@@ -2,51 +2,36 @@
   "trajets": [{
     "idTrajet": 0,
     "idConducteur": 0,
-    "accompagnateur": 5,
+    "idAccompagnateur": 5,
     "durée": {
       "heureDépart": "2024-03-05T15:00:00.000Z",
       "heureFin": "2024-03-05T16:00:00.000Z"
     },
-    "véhicule": {
-      "nom": "308SW",
-      "boite": "manuelle"
-    },
+      "idVehicule": 0,
     "kilometres": 123,
     "conditions": {
       "idConditionMeteo": 3,
       "idTypeRoute": 2,
       "idTypeTraffic": 1
     },
-    "exercicesRéalisés": [{
-        "idExercice": 0
-      },
-      {
-        "idExercice": 1
-      }
-    ]
+    "exercicesRéalisés": [0,1]
   },
   {
     "idTrajet": 1,
     "idConducteur": 0,
-    "accompagnateur": 2,
+    "idAccompagnateur": 2,
     "durée": {
       "heureDépart": "2024-03-06T15:00:00.000Z",
       "heureFin": "2024-03-06T16:00:00.000Z"
     },
-    "véhicule": {
-      "nom": "Leon5F",
-      "boite": "automatique"
-    },
+    "idVehicule": 1,
     "kilometres": 107,
     "conditions": {
       "idConditionMeteo": 1,
       "idTypeRoute": 1,
       "idTypeTraffic": 0
     },
-    "exercicesRéalisés": [{
-        "idExercice": 2
-      }
-    ] 
+    "exercicesRéalisés": [2]
   }
 ]
 }
