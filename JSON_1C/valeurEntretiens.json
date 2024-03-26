@@ -1,0 +1,10 @@
+{"entretiensObligatoires":[
+    {
+        "idEntretien":0,
+        "dateEntretien":"2024-02-11T15:30:00.000Z",
+        "nomEnseignant":"Boissière",
+        "prenomEnseignant": "Sylvie",
+        "agence":"Boissière Routière"
+    }
+]
+}

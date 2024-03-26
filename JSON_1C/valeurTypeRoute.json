@@ -1,0 +1,9 @@
+{
+    "typeRoute":[
+        {"typeRouteId":0, "typeRouteNom":"Nationale"},
+        {"typeRouteId":1, "typeRouteNom":"Départementale"},
+        {"typeRouteId":2, "typeRouteNom":"Autoroute"},
+        {"typeRouteId":3, "typeRouteNom":"Centre-ville"},
+        {"typeRouteId":4, "typeRouteNom":"Mixte"}
+    ]
+}

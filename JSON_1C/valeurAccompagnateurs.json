@@ -1,0 +1,13 @@
+{"accompagnateurs":[{
+    "accompagnateurId":0,
+    "nom":"Buisson",
+    "prenom":"Marie",
+    "mail":"marieBuisson@mail.com",
+    "telephone":"07 77 77 77 76",
+    "datePermis":"2020-01-01T12:00:00.000Z",
+    "documentPermis":"./permis/permis.pdf",
+    "documentAccordAssureur": "./assurances/assuranceBuisson.pdf",
+    "casierVierge":true,
+    "documentCasierVierge":"./casiers/extraitCasierBuisson.pdf"
+}]
+}
