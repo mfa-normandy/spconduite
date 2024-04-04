@@ -7,48 +7,7 @@
     <title>Document</title>
     <link href="https://fonts.googleapis.com/css2?family=David+Libre:wght@500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
-    <script>
-        window.onload = function() {
-        // format storage // let listeTrajets = [{"idTrajet":1,"durée":{"heureDépart":"2024-03-05T15:00:00.000Z","heureFin":"2024-03-05T16:00:00.000Z"},"kilometres":123,"conditions":{"idConditionMeteo":3,"idTypeRoute":2,"idTypeTraffic":1},"manoeuvres":[0,1]},{"idTrajet":2,"durée":{"heureDépart":"2024-03-06T15:00:00.000Z","heureFin":"2024-03-06T16:00:00.000Z"},"kilometres":107,"conditions":{"idConditionMeteo":1,"idTypeRoute":1,"idTypeTraffic":1},"manoeuvres":[2]}];//variables
-        let meteo = [{"meteoId":1,"temps":"Clair"},{"meteoId":2,"temps":"Nuageux"},{"meteoId":3,"temps":"Couvert"},{"meteoId":4,"temps":"Pluvieux"},{"meteoId":5,"temps":"Brumeux"},{"meteoId":6,"temps":"Neigeux"},{"meteoId":7,"temps":"Orageux"},{"meteoId":8,"temps":"Tempetueux"}];
-        let typeRoute = [{"typeRouteId":1,"typeRouteNom":"Nationale"},{"typeRouteId":2,"typeRouteNom":"Départementale"},{"typeRouteId":3,"typeRouteNom":"Autoroute"},{"typeRouteId":4,"typeRouteNom":"Centre-ville"},{"typeRouteId":5,"typeRouteNom":"Mixte"}];
-        let typeTraffic = [{"traficId":1,"typeTrafic":"Faible"},{"traficId":2,"typeTrafic":"Modéré"},{"traficId":3,"typeTrafic":"Fort"},{"traficId":4,"typeTrafic":"Fluctuant"}];
-        let manoeuvres = [{"manoeuvreId":1,"manoeuvreNom":"Stationnement en épi"},{"manoeuvreId":2,"manoeuvreNom":"Stationnement en bataille"},{"manoeuvreId":3,"manoeuvreNom":"Stationnement en créneau"}];    
-        //construction des listes
-        let selectMeteo = document.getElementById("meteo");
-        let selectRoute = document.getElementById("route");
-        let selectTrafic = document.getElementById("trafic");
-        let selectManoeuvre = document.getElementById("manoeuvre");
-        //meteo
-        for (let i = 0; i < meteo.length; i++) {
-            let option = document.createElement("option");
-            option.value = meteo[i].meteoId;
-            option.text = meteo[i].temps;
-            selectMeteo.appendChild(option);
-        }
-        //route
-        for (let i = 0; i < typeRoute.length; i++) {
-            let option = document.createElement("option");
-            option.value = typeRoute[i].typeRouteId;
-            option.text = typeRoute[i].typeRouteNom;
-            selectRoute.appendChild(option);
-        }
-        //trafic
-        for (let i = 0; i < typeTraffic.length; i++) {
-            let option = document.createElement("option");
-            option.value = typeTraffic[i].traficId;
-            option.text = typeTraffic[i].typeTrafic;
-            selectTrafic.appendChild(option);
-        }
-        //manoeuvres
-        for (let i = 0; i < manoeuvres.length; i++) {
-            let option = document.createElement("option");
-            option.value = manoeuvres[i].manoeuvreId;
-            option.text = manoeuvres[i].manoeuvreNom;
-            selectManoeuvre.appendChild(option);
-        }
-    }
-    </script>
+    
     <style>
         * {    
             box-sizing: border-box;
@@ -250,40 +209,40 @@
             <fieldset id="conditions" class="form-grid">
                 <label for="meteo">Meteo</label>
                 <select name="meteo" id="meteo" size="8" required>
-                  <!-- <option value="1">Clair</option>
+                    <option value="1">Clair</option>
                     <option value="2">Nuageux</option>
                     <option value="3">Couvert</option>
                     <option value="4">Pluvieux</option>
                     <option value="5">Brumeux</option>
                     <option value="6">Neigeux</option>
                     <option value="7">Orageux</option>
-                    <option value="8">Tempetueux</option> -->
+                    <option value="8">Tempetueux</option>
                 </select>
                 
                 <label for="route">Type de route</label>
                 <select name="route" id="route" size="5" required>
-                 <!--   <option value="1">Nationale</option>
+                    <option value="1">Nationale</option>
                     <option value="2">Départementale</option>
                     <option value="3">Autoroute</option>
                     <option value="4">3Centre-ville</option>
-                    <option value="5">Mixte</option>  -->
+                    <option value="5">Mixte</option>
                 </select>
                 
                 <label for="trafic">Type de trafic</label>
                 <select name="trafic" id="trafic" size="4" required>
-                <!--    <option value="1">Faible</option>
+                    <option value="1">Faible</option>
                     <option value="2">Modéré</option>
                     <option value="3">Fort</option>
-                    <option value="4">Fluctuant</option> -->
+                    <option value="4">Fluctuant</option>
                 </select>
             </fieldset>
             <fieldset id="manoeuvres" class="form-grid">
                 <label for="manoeuvre">Manoeuvres réalisées</label>
                 <select name="manoeuvre" id="manoeuvre" size="3" required multiple>
-                  <!--  
+                    
                     <option value="1">  Stationnement en épi</option>
                     <option value="1"> Stationnement en bataille</option>
-                    <option value="1">  Stationnement en créneau</option> -->
+                    <option value="1">  Stationnement en créneau</option>
                     
                     
                 </select>            </fieldset>
