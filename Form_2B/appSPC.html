@@ -47,7 +47,32 @@
             option.text = manoeuvres[i].manoeuvreNom;
             selectManoeuvre.appendChild(option);
         }
+    
+    
+    
+   var select = document.getElementById('manoeuvre'); 
+   select.addEventListener('mousedown', function(e) {
+    e.preventDefault();
+    var select = this;
+    var index = Array.from(select.options).indexOf(e.target);
+    if (e.target.tagName.toLowerCase() !== 'option' || index === -1) return;
+    select.options[index].selected = !select.options[index].selected;
+    return false;});
+
+    var select = document.getElementById('route'); 
+   select.addEventListener('mousedown', function(e) {
+    e.preventDefault();
+    var select = this;
+    var index = Array.from(select.options).indexOf(e.target);
+    if (e.target.tagName.toLowerCase() !== 'option' || index === -1) return;
+    select.options[index].selected = !select.options[index].selected;
+    return false;});
+
+
+  
     }
+
+    
     </script>
     <style>
         * {    
@@ -261,7 +286,7 @@
                 </select>
                 
                 <label for="route">Type de route</label>
-                <select name="route" id="route" size="5" required>
+                <select name="route" id="route" size="5" required multiple>
                  <!--   <option value="1">Nationale</option>
                     <option value="2">Départementale</option>
                     <option value="3">Autoroute</option>
