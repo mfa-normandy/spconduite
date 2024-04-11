@@ -100,8 +100,9 @@
             font-family: David Libre, sans-serif;
             font-size: 0.8em;
             text-align: center;
-            height: 5vh;
+            height: auto;
         }
+        /*
         nav {
             grid-column: 1;
             grid-row: 2;
@@ -115,6 +116,41 @@
             width: 400px;
             height: 100%;
         }
+        */
+        
+        nav {
+            grid-column: 1;
+            grid-row: 2;
+            width: 400px;
+            background-color: rgb(33,78,168);
+            padding-right: 5px;
+            padding-bottom: 5px;
+            text-align: right;
+            display: flex; /* Add this line to make the nav a flex container */
+            flex-direction: column; /* Add this line if you want the items to stack vertically */
+            
+        }
+        
+        nav div { /* Replaced 'table' with 'div' */
+            width: 100%;
+            height: 80%;
+            display: flex;
+            justify-content: right;
+        }
+
+        nav div span {
+            text-align: center;
+            background-color: rgb(33,78,168);
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 0.7em;
+            padding: 5px;
+            border: 1px solid white;
+            border-radius: 5px;
+            width: auto;
+            height: auto;
+        }
+
         aside {
             grid-column: 1;
             grid-row: 3;
@@ -137,18 +173,6 @@
         aside img {
             width: 400px;
             height: 100%;
-        }
-        
-        table tr td span {
-            text-align: center;
-            background-color: rgb(33,78,168);
-            color: white;
-            font-family: Arial, sans-serif;
-            font-size: 0.7em;
-            padding: 5px;
-            border: 1px solid white;
-            border-radius: 5px;
-            
         }
         
         #newsheet {
@@ -235,11 +259,10 @@
         <h1>Uniconduite</h1>
     </header>
     <nav>
-        <table>
-            <tr><td ><span id="login">Log In</span></td></tr>
-            <tr><td ><span id="newsheet"><strong> Créer une fiche de conduite</strong></span></td></tr>
-            <tr><td ><span id="stats">Dashboard stastistiques</span></td></tr>
-        </table>
+        <div><span id="login">Log In</span></div>
+            <div><span id="newsheet"><strong> Créer une fiche de conduite</strong></span></div>
+            <div><span id="stats">Dashboard stastistiques</span></div>
+    </div>
     </nav>
     <aside>
         <img id="resp-400-image" src="./car.png" alt="Logo" width="400" height="120">
