@@ -208,6 +208,44 @@
 
     tableau.appendChild(entete)
 
+    //Ici je mets un séparateur pour le récapitulatif des expériences
+    let ligneRecap = document.createElement("tr")
+    let celluleRecap = document.createElement("td")
+    celluleRecap.textContent = 'Avancée générale'
+    celluleRecap.setAttribute('colspan', tableauEntete.length)
+    ligneRecap.classList.add('ligne-recapitulatif')
+    ligneRecap.appendChild(celluleRecap)
+    tableau.appendChild(ligneRecap)    
+
+    let totalMillisecondes = 0 //Permet de savoir combien d'heure de conduite ont été réalisées
+
+    listeTrajets.forEach(function(trajet){ //On fait une ligne récap en haut du tableau
+        let heureDepart = new Date(trajet.duree.heureDepart)
+        let heureFin = new Date(trajet.duree.heureFin)
+        let differenceMillisecondes = heureFin - heureDepart
+        totalMillisecondes += differenceMillisecondes
+    })
+
+    let ligneRecapContent = document.createElement("tr") //Début du calcul des heures de conduites réalisées, on va récupérer les heures et minutes
+    let totalHeure = Math.floor(totalMillisecondes / 3600000) 
+    totalMillisecondes %= 3600000
+    let totalMinutes = Math.floor(totalMillisecondes / 60000)
+
+    let celluleRecapKm = document.createElement("td") //Ajout de la cellule pour montrer les km
+    celluleRecapKm.textContent= totalKm + "km" 
+    celluleRecapKm.setAttribute('colspan', tableauEntete.length/2)
+    
+    let celluleRecapDuree = document.createElement("td") //Ajout de la cellule pour montrer le temps conduit
+    celluleRecapDuree.textContent = totalHeure + "h " + totalMinutes + "min" 
+    celluleRecapDuree.setAttribute('colspan', tableauEntete.length/2)
+
+    ligneRecapContent.appendChild(celluleRecapDuree)
+    ligneRecapContent.appendChild(celluleRecapKm)
+
+    tableau.appendChild(ligneRecapContent) 
+
+    listeTrajets.reverse() //On veut afficher les plus récentes en premier
+
     listeTrajets.forEach(function(trajet){//La on fait le détail de chaque trajet
 
         //On récupère l'ID//
@@ -253,80 +291,9 @@
         tableau.appendChild(ligne)
     })
 
-    //Ici je mets un séparateur pour le récapitulatif des expériences
-    let ligneRecap = document.createElement("tr")
-    let celluleRecap = document.createElement("td")
-    celluleRecap.textContent = 'Avancée générale'
-    celluleRecap.setAttribute('colspan', tableauEntete.length)
-    ligneRecap.classList.add('ligne-recapitulatif')
-    ligneRecap.appendChild(celluleRecap)
-    tableau.appendChild(ligneRecap)    
-
-    let totalMillisecondes = 0 //Permet de savoir combien d'heure de conduite ont été réalisées
-
-    listeTrajets.forEach(function(trajet){ //On fait une ligne récap en haut du tableau
-        let heureDepart = new Date(trajet.duree.heureDepart)
-        let heureFin = new Date(trajet.duree.heureFin)
-        let differenceMillisecondes = heureFin - heureDepart
-        totalMillisecondes += differenceMillisecondes
-    })
-
-    let ligneRecapContent = document.createElement("tr") //Début du calcul des heures de conduites réalisées, on va récupérer les heures et minutes
-    let totalHeure = Math.floor(totalMillisecondes / 3600000) 
-    totalMillisecondes %= 3600000
-    let totalMinutes = Math.floor(totalMillisecondes / 60000)
-
-    let celluleRecapKm = document.createElement("td") //Ajout de la cellule pour montrer les km
-    celluleRecapKm.textContent= totalKm + "km" 
-    celluleRecapKm.setAttribute('colspan', tableauEntete.length/2)
-    
-    let celluleRecapDuree = document.createElement("td") //Ajout de la cellule pour montrer le temps conduit
-    celluleRecapDuree.textContent = totalHeure + "h " + totalMinutes + "min" 
-    celluleRecapDuree.setAttribute('colspan', tableauEntete.length/2)
-
-    ligneRecapContent.appendChild(celluleRecapDuree)
-    ligneRecapContent.appendChild(celluleRecapKm)
-
-    tableau.appendChild(ligneRecapContent)  
+     
 
     creationTableau.appendChild(tableau)
-
-    //On fait un tableau pour les conditions et exercices//
-
-    let creationTableauCondition = document.getElementById("tableauCondition")
-    let tableauCondition = document.createElement("table")
-    let enteteCondition = document.createElement("tr")
-
-    let tableauEnteteCondition = "Conditions"
-
-    let celluleEnTeteCondition = document.createElement("th");
-    celluleEnTeteCondition.textContent = tableauEnteteCondition;
-    celluleEnTeteCondition.setAttribute('colspan', 6)
-    enteteCondition.appendChild(celluleEnTeteCondition);
-
-    let ligneRecapCondition = document.createElement("tr")
-    let listeTypeCondition = ["Meteo", "Route", "Trafic"]
-
-    listeTypeCondition.forEach(function (condition){
-        let celluleRecapCondition = document.createElement("td")
-        celluleRecapCondition.textContent = condition
-        ligneRecapCondition.appendChild(celluleRecapCondition)
-    })
-
-    tableauCondition.appendChild(enteteCondition)
-    tableauCondition.appendChild(ligneRecapCondition)
-
-    let listeConditions = []
-
-    listeTrajets.forEach(function(trajet){
-
-    })
-
-
-    
-    
-
-    creationTableauCondition.appendChild(tableauCondition)
 
 
 
@@ -527,22 +494,14 @@
         
         section table{
             width: 100%;
+            margin-top: 15px;
+            margin-bottom: 15px;
         }
 
         table th, table td, table tr{
             width: auto;
             text-align: center;
         }
-
-        #tableauCondition{  
-            grid-row: 6;
-            margin-top: 15px;
-            margin-bottom: 15px;
-        }
-
-        
-
-        
 
         table{
             border-collapse: collapse;
@@ -663,9 +622,6 @@
             
         </article>
         <section>
-
-        </section>
-        <section id="tableauCondition">
 
         </section>
         <footer>
