@@ -90,7 +90,6 @@
 
     //Fonction pour ajouter des éléments dans le localStorage
     formulaire.addEventListener('submit', ()=>{
-        event.preventDefault()
         let compteur = listeTrajets.length+1 //Utilisé pour faire l'ID trajet
         
         //Récupérer la value de la date de départ//
@@ -163,8 +162,6 @@
 
         console.log(trajetParse)
 
-        //Permet de reload la page et tout vider (sauf le cache évidemment,normalement mais là j'y arrive pas)
-        // document.location.reload()
     })
 
 
