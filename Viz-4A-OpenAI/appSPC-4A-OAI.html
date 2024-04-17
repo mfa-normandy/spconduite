@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=David+Libre:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+    <script>
+        window.onload = function() {
+        // format storage // let listeTrajets = [{"idTrajet":1,"duree":{"heureDepart":"2024-03-05T15:00:00.000Z","heureFin":"2024-03-05T16:00:00.000Z"},"kilometres":123,"conditions":{"idConditionMeteo":3,"idTypeRoute":2,"idTypeTraffic":1},"manoeuvres":[0,1]},{"idTrajet":2,"duree":{"heureDepart":"2024-03-06T15:00:00.000Z","heureFin":"2024-03-06T16:00:00.000Z"},"kilometres":107,"conditions":{"idConditionMeteo":1,"idTypeRoute":1,"idTypeTraffic":1},"manoeuvres":[2]}];//variables
+        let meteo = [{"meteoId":1,"temps":"Clair"},{"meteoId":2,"temps":"Nuageux"},{"meteoId":3,"temps":"Couvert"},{"meteoId":4,"temps":"Pluvieux"},{"meteoId":5,"temps":"Brumeux"},{"meteoId":6,"temps":"Neigeux"},{"meteoId":7,"temps":"Orageux"},{"meteoId":8,"temps":"Tempetueux"}];
+        let typeRoute = [{"typeRouteId":1,"typeRouteNom":"Nationale"},{"typeRouteId":2,"typeRouteNom":"Départementale"},{"typeRouteId":3,"typeRouteNom":"Autoroute"},{"typeRouteId":4,"typeRouteNom":"Centre-ville"},{"typeRouteId":5,"typeRouteNom":"Mixte"}];
+        let typeTraffic = [{"traficId":1,"typeTrafic":"Faible"},{"traficId":2,"typeTrafic":"Modéré"},{"traficId":3,"typeTrafic":"Fort"},{"traficId":4,"typeTrafic":"Fluctuant"}];
+        let manoeuvres = [{"manoeuvreId":1,"manoeuvreNom":"Stationnement en épi"},{"manoeuvreId":2,"manoeuvreNom":"Stationnement en bataille"},{"manoeuvreId":3,"manoeuvreNom":"Stationnement en créneau"}];    
+        /*construction des listes
+        let selectMeteo = document.getElementById("meteo");
+        let selectRoute = document.getElementById("route");
+        let selectTrafic = document.getElementById("trafic");
+        let selectManoeuvre = document.getElementById("manoeuvre");
+        //meteo
+        for (let i = 0; i < meteo.length; i++) {
+            let option = document.createElement("option");
+            option.value = meteo[i].meteoId;
+            option.text = meteo[i].temps;
+            selectMeteo.appendChild(option);
+        }
+        //route
+        for (let i = 0; i < typeRoute.length; i++) {
+            let option = document.createElement("option");
+            option.value = typeRoute[i].typeRouteId;
+            option.text = typeRoute[i].typeRouteNom;
+            selectRoute.appendChild(option);
+        }
+        //trafic
+        for (let i = 0; i < typeTraffic.length; i++) {
+            let option = document.createElement("option");
+            option.value = typeTraffic[i].traficId;
+            option.text = typeTraffic[i].typeTrafic;
+            selectTrafic.appendChild(option);
+        }
+        //manoeuvres
+        for (let i = 0; i < manoeuvres.length; i++) {
+            let option = document.createElement("option");
+            option.value = manoeuvres[i].manoeuvreId;
+            option.text = manoeuvres[i].manoeuvreNom;
+            selectManoeuvre.appendChild(option);
+        }
+        
+    
+    //Selectionner plusieurs manoeuvres
+    var select = document.getElementById('manoeuvre'); 
+    select.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        var select = this;
+        var index = Array.from(select.options).indexOf(e.target);
+        if (e.target.tagName.toLowerCase() !== 'option' || index === -1) return;
+        select.options[index].selected = !select.options[index].selected;
+        return false;
+        }
+    );
+
+    //Selectionner plusieurs types de routes
+    var select = document.getElementById('route'); 
+    select.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        var select = this;
+        var index = Array.from(select.options).indexOf(e.target);
+        if (e.target.tagName.toLowerCase() !== 'option' || index === -1) return;
+        select.options[index].selected = !select.options[index].selected;
+        return false;
+        }
+    );
+*/
+    
+
+    
+    //On prépare de quoi accéder à ce qui est déjà stocké dans le localstorage
+    let listeTrajets = localStorage.getItem('trajets') //Avec ça, on récupère le localstorage, au cas où il y ait déjà des trajets enregistrés
+    if(listeTrajets === null){ //On regarde s'il y a des trajets d'enregistré
+       listeTrajets=[] //Devient un tableau vide si 0 trajets enregistrés
+    } else {
+        listeTrajets = JSON.parse(listeTrajets) //Sinon, on retransforme la variable en tableau contenant les trajets du localStorage
+    }
+
+    let totalKm = 0 //Stocke les km parcourus
+
+    
+    var enregistrementLocalStorage = localStorage.getItem('trajets')
+    const trajetParse = JSON.parse(enregistrementLocalStorage)//On retransforme tout en une variable qui contient un objet, si on veut la voir dans le console.log
+
+    console.log(trajetParse)
+
+    //Afficher où on en est dans l'apprentissage
+    const objectifKm = 3000; //Définition de l'objectif à atteindre
+
+    if(localStorage.getItem('trajets') !== null){ //On vérifie si il y a déjà des infos dans la key trajets
+        trajetParse.forEach(trajet =>
+            totalKm += Number(trajet.kilometres) //transforme chaque propriétés kilomètres de chaque trajet en un nombre et l'ajoute au total parcouru
+        )
+    }
+    
+    let objectifKmRestant = objectifKm - totalKm
+
+    //Afficher du texte pour les km parcourus
+    /*
+    if(totalKm > 0){
+            let affichageAvancee = document.querySelector('aside')
+            let nouveauTotalKm = document.createElement("p")
+            nouveauTotalKm.textContent = "Félicitations, vous avez déjà conduit " + totalKm + "km ! Plus que " + objectifKmRestant + " à parcourir !"
+            nouveauTotalKm.id = "TotalKm"
+            affichageAvancee.appendChild(nouveauTotalKm)
+        } */
+
+        let compteur = listeTrajets.length+1
+    //Pour insérer des éléments dans le localStorage, il faut prendre le formulaire
+    var formulaire = document.getElementById("formulaire"); //On récupère le formulaire
+
+    //Fonction pour ajouter des éléments dans le localStorage
+    formulaire.addEventListener('submit', (event) => {
+    event.preventDefault();
+    
+        
+        // Handler de la requete à l'API Open AI
+        var oaipass = document.getElementById("oaipass").value;
+        var prompt = document.getElementById("prompt").value;
+        
+        $.ajax({
+    url: 'https://api.openai.com/v1/threads/runs',
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + oaipass,
+        'OpenAI-Beta': 'assistants=v1',
+    },
+    data: JSON.stringify({
+        "assistant_id": "asst_rxdHY63u4Z1NToF7zD8ae2Nr",
+        "thread": {
+            "messages": [{
+                "role": "user",
+                "content": prompt
+            }]
+        }
+    }),
+    responseType: 'json',
+    success: function(data) {
+        console.log(data);
+        // On récupère le message de réponse
+        // On extrait la valeur de la clé "status" du message de réponse
+        var status = data.status;
+        var threadId = data.thread_id;
+        var runId = data.id;
+        document.getElementById("response").innerHTML = "Bien joué votre requête OpenAI API est:" + status + ", <br> votre diagramme est en cours de construction.<br>Thread ID: " + threadId + "<br>Run Id: " + runId + "<img src='./ld.gif' alt='diagramme' width='70' height='70'>";
+        // Create a function that calls sendRequest with the necessary arguments
+        var sendRequestWithArgs = function() {
+            sendRequest(threadId, runId, oaipass, intervalId);
+        };
+
+    // Call sendRequestWithArgs every 10000 milliseconds (10 seconds)
+    var intervalId = setInterval(sendRequestWithArgs, 10000);
+
+    },
+    error: function(error) {
+        console.log('Error:', error);
+    }
+    });
+    
+    ////essaie de récupérer l'image toutes les 5 secondes
+    function sendRequest(thread_id,run_id,oai_pass,interval_id) {
+        $.ajax({
+            url: 'https://api.openai.com/v1/threads/' + thread_id + '/runs/' + run_id,
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + oai_pass,
+                'OpenAI-Beta': 'assistants=v1',
+            },
+            responseType: 'json',
+            success: function(data) {
+                console.log(data);
+                console.log(data.status);
+                // Check if the data is 'complete'
+                if (data.status === 'completed') {
+                    // If it is, stop the interval
+                    clearInterval(interval_id);
+                       var imageId = getImageId(thread_id, oai_pass);
+                       getImageFile(imageId, oai_pass);
+                       document.getElementById("response").innerHTML = "<img src='./chart.png' alt='diagramme' width='400' height='400'>";
+                }
+            },
+            error: function(error) {
+                console.log('Error:', error);
+            }
+        });
+    }
+    
+    function getImageId(thread_id, oai_pass) {
+
+        $.ajax({
+            url: 'https://api.openai.com/v1/threads/' + thread_id + '/messages',
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + oai_pass,
+                'OpenAI-Beta': 'assistants=v1',
+            },
+            responseType: 'json',
+            success: function(data) {
+                console.log(data);
+            //var imageId = data[0].content[0].image_file.file_id;
+            var imageId = data[0];
+            console.log(imageId);
+                return imageId;
+            },
+            error: function(error) {
+                console.log('Error:', error);
+            }
+        });
+    }
+
+        function getImageFile(image_id, oai_pass) {
+            $.ajax({
+                url: 'https://api.openai.com/v1/files/' + image_id,
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + oai_pass,
+                    'OpenAI-Beta': 'assistants=v1',
+                },
+                responseType: 'blob',
+                success: function(data) {
+                    console.log(data);
+                    // Use FileSaver.js to save the blob as chart.png
+                    saveAs(data, "./chart.png");
+                },
+                error: function(error) {
+                    console.log('Error:', error);
+                }
+            });
+        }
+    
+    
+    
+    
+           
+    
+        // event.preventDefault()
+         //Utilisé pour faire l'ID trajet
+        /*
+        //Récupérer la value de la date de départ//
+        let nouveauDepart = document.getElementById("date").value
+
+        //Récupérer la  value de l'heure de départ//
+        let nouveauHeureDepart = document.getElementById("heure").value
+
+        //Récupérer la value de la date du retour//
+        let nouveauRetour = document.getElementById("dateR").value
+
+        //Récupérer la value de l'heure de retour//
+        let nouveauHeureRetour = document.getElementById("heureR").value
+
+        //Récupérer la value des km parcourus//
+        let nouveauKm = document.getElementById("km").value
+
+        //Récupérer la value de météo//
+        let nouveauMeteo = selectMeteo.value
+
+        //Récupérer les values des routes + transformer en tableau//
+        let routeOptions = selectRoute.selectedOptions;
+        let nouveauRoute = Array.from(routeOptions).map(option => option.value);
+
+        //Récupérer la value du trafic//
+        let nouveauTrafic = selectTrafic.value
+
+        //Récupérer les values des manoeuvres + transformer en tableau
+        let manoeuvreOptions = selectManoeuvre.selectedOptions;
+        let nouveauManoeuvre = Array.from(manoeuvreOptions).map(option => option.value);
+
+        //On définit d'abord les bons formats pour les dates//
+        nouveauDepart = new Date(nouveauDepart)
+        let nouveauDepartString = nouveauDepart.toISOString().split('T')[0];
+        let nouveauHeureDepartString = nouveauHeureDepart + ':00.000Z';
+        let heureDepart = nouveauDepartString + 'T' + nouveauHeureDepartString
+
+        nouveauRetour = new Date(nouveauRetour)
+        let nouveauRetourString = nouveauRetour.toISOString().split('T')[0];
+        let nouveauHeureRetourString = nouveauHeureRetour + ':00.000Z';
+        let heureFin = nouveauRetourString + 'T' + nouveauHeureRetourString
+
+        //On donne le format d'un nouveau trajet
+        const nouveauTrajet = {
+            "idTrajet":compteur,
+            "duree":{
+                "heureDepart":heureDepart,
+                "heureFin":heureFin
+            },
+            "kilometres":nouveauKm,
+            "conditions":
+            {
+                "idConditionMeteo":nouveauMeteo,
+                "idTypeRoute":nouveauRoute,
+                "idTypeTraffic":nouveauTrafic
+            },
+            "manoeuvres":nouveauManoeuvre
+        }
+
+        //On l'ajoute au tableau de listeTrajets, défini avant la fonction
+        listeTrajets.push(nouveauTrajet)
+        
+        //Ici, c'est l'enregistrement dans le localstorage
+        const listeTrajetsJSON = JSON.stringify(listeTrajets)
+        localStorage.setItem('trajets', listeTrajetsJSON) //On les enregistre dans le localstorage
+    })   */
+
+    /*Afficher l'avancée en km
+    let affichageNumeroFiche = document.querySelector("h2")
+    affichageNumeroFiche.textContent = "Ma sortie conduite accompagnée numéro #" + compteur
+    
+ 
+    //Faire un tableau récapitulatif des derniers trajets
+    //On commence par définir les variables qui auront les différents éléments
+    let creationTableau = document.querySelector("section")
+    let tableau = document.createElement("table")
+    let entete = document.createElement("tr")
+
+    //Besoin de faire un tableau de correspondance//
+    let tableauEntete = ["ID Trajet", "Jour de départ", "Durée", "Distance parcourue"]
+
+    tableauEntete.forEach(function(propriete){
+        let celluleEnTete = document.createElement("th");
+        celluleEnTete.textContent = propriete;
+        entete.appendChild(celluleEnTete);
+    })
+
+    tableau.appendChild(entete)
+
+    //Ici je mets un séparateur pour le récapitulatif des expériences
+    let ligneRecap = document.createElement("tr")
+    let celluleRecap = document.createElement("td")
+    celluleRecap.textContent = 'Avancée générale'
+    celluleRecap.setAttribute('colspan', tableauEntete.length)
+    ligneRecap.classList.add('ligne-recapitulatif')
+    ligneRecap.appendChild(celluleRecap)
+    tableau.appendChild(ligneRecap)    
+
+    let totalMillisecondes = 0 //Permet de savoir combien d'heure de conduite ont été réalisées
+
+    listeTrajets.forEach(function(trajet){ //On fait une ligne récap en haut du tableau
+        let heureDepart = new Date(trajet.duree.heureDepart)
+        let heureFin = new Date(trajet.duree.heureFin)
+        let differenceMillisecondes = heureFin - heureDepart
+        totalMillisecondes += differenceMillisecondes
+    })
+
+    let ligneRecapContent = document.createElement("tr") //Début du calcul des heures de conduites réalisées, on va récupérer les heures et minutes
+    let totalHeure = Math.floor(totalMillisecondes / 3600000) 
+    totalMillisecondes %= 3600000
+    let totalMinutes = Math.floor(totalMillisecondes / 60000)
+
+    let celluleRecapKm = document.createElement("td") //Ajout de la cellule pour montrer les km
+    celluleRecapKm.textContent= totalKm + "km" 
+    celluleRecapKm.setAttribute('colspan', tableauEntete.length/2)
+    
+    let celluleRecapDuree = document.createElement("td") //Ajout de la cellule pour montrer le temps conduit
+    celluleRecapDuree.textContent = totalHeure + "h " + totalMinutes + "min" 
+    celluleRecapDuree.setAttribute('colspan', tableauEntete.length/2)
+
+    ligneRecapContent.appendChild(celluleRecapDuree)
+    ligneRecapContent.appendChild(celluleRecapKm)
+
+    tableau.appendChild(ligneRecapContent) 
+
+    listeTrajets.reverse() //On veut afficher les plus récentes en premier
+
+    listeTrajets.forEach(function(trajet){//La on fait le détail de chaque trajet
+
+        //On récupère l'ID//
+        let ligne = document.createElement("tr")
+        let celluleIdTrajet = document.createElement("td")
+        celluleIdTrajet.textContent = trajet.idTrajet
+        ligne.appendChild(celluleIdTrajet)
+        
+        //On récupère la date de départ//
+        let celluleJourDepart = document.createElement("td")
+        let valeurJourDepart = new Date(trajet.duree.heureDepart)
+        let jourDepart = valeurJourDepart.getDate()
+        let moisDepart = valeurJourDepart.getMonth()+1
+        let anneeDepart = valeurJourDepart.getFullYear()
+        celluleJourDepart.textContent = jourDepart + "/" + moisDepart + "/" + anneeDepart
+        ligne.appendChild(celluleJourDepart)
+
+
+        //On récupère et calcule la durée du trajet//
+        let celluleDuree = document.createElement("td")
+        let calculDepart = new Date(trajet.duree.heureDepart)
+        let calculRetour = new Date(trajet.duree.heureFin)
+        let differenceMillisecondes = calculRetour - calculDepart
+        let heure = Math.floor(differenceMillisecondes / 3600000)
+        differenceMillisecondes %= 3600000
+        let minutes = Math.floor(differenceMillisecondes / 60000)
+        differenceMillisecondes %= 60000
+        let secondes = Math.floor(differenceMillisecondes / 1000)
+        if (heure > 0){
+            celluleDuree.textContent = heure + "h " + minutes + "min " + secondes + "s"
+        } else {
+            celluleDuree.textContent = minutes + "min " + secondes + "s"
+        }
+        ligne.appendChild(celluleDuree)
+
+        
+        //On récupère les km parcourus//
+        let celluleKm = document.createElement("td")
+        celluleKm.textContent = trajet.kilometres + "km"
+        ligne.appendChild(celluleKm)
+
+
+        tableau.appendChild(ligne)
+ */   })
+
+     
+
+  //  creationTableau.appendChild(tableau)
+
+
+
+}
+
+    </script>
+    <style>
+        * {    
+            box-sizing: border-box;
+        }
+        body {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+            height: 100vh; /* Subtract double the gridgap from the height */
+            width: 400px; /* Subtract double the gridgap from the width */
+            /* margin:10px;*/
+            margin-left:auto;
+            margin-right:auto;
+            /*grid-gap:15px;*/
+            
+        }
+        header {
+            grid-column: 1;
+            grid-row: 1;
+            width: 400px;
+            padding: 5px;
+            background-color: rgb(33,78,168);
+            color: white;
+            font-family: David Libre, sans-serif;
+            font-size: 0.8em;
+            text-align: center;
+            height: auto;
+        }
+        /*
+        nav {
+            grid-column: 1;
+            grid-row: 2;
+            width: 400px;
+            background-color: rgb(33,78,168);
+            padding-right: 5px;
+            padding-bottom: 5px;
+            text-align: right;
+        }
+        nav table { 
+            width: 400px;
+            height: 100%;
+        }
+        */
+        
+        nav {
+            grid-column: 1;
+            grid-row: 2;
+            width: 400px;
+            background-color: rgb(33,78,168);
+            padding-right: 5px;
+            padding-bottom: 5px;
+            text-align: right;
+            display: flex; /* Add this line to make the nav a flex container */
+            flex-direction: column; /* Add this line if you want the items to stack vertically */
+        }
+        
+        nav div { /* Replaced 'table' with 'div' */
+            width: 100%;
+            height: 95%;
+            display: flex;
+            justify-content: right;
+        }
+
+        nav div span {
+            text-align: center;
+            background-color: rgb(33,78,168);
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 0.7em;
+            padding: 5px;
+            border: 1px solid white;
+            border-radius: 5px;
+            width: auto;
+            height:auto;
+
+        }
+
+        aside {
+            grid-column: 1;
+            grid-row: 3;
+            position: relative;
+            width: 400px; /* adjust as needed */
+            
+        }
+        aside h1 {
+            position: absolute;
+            top: -15px;
+            /* transform: translate(-50%, -50%);*/
+            color: rgb(33,78,168); /* adjust as needed */
+            background-color: white;
+            opacity: 0.8;
+            width: 400px;
+            text-align: center;
+            font-family: David Libre, sans-serif;
+            font-size: 20px;
+        }
+        aside img {
+            width: 400px;
+            height: 120px;  /*REGLE LE PROBLEME D'IMAGE*/
+        }
+        
+        #stats {
+            background-color: rgb(255, 255, 255);
+            color: rgb(33, 78, 168);
+        }
+        
+        
+        article {
+            grid-column: 1 ;
+            grid-row: 4;
+            padding: 5px;
+            width: 400px;
+        }
+        
+        footer {
+            /* grid-column: 1; */ 
+            grid-row: 7 ;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 1em;
+            padding: 15px;
+            width: 400px;
+            height: 10vh;
+            background-color: rgb(33,78,168);
+        }
+        
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: 1fr;
+            gap: 1px;
+        }
+        
+        label {
+            grid-column: 1;
+            height: 30px;
+        }
+        
+        input  {
+            grid-column: 2;
+            height: 30px;
+        }
+        
+        input:valid, select:valid {
+            border: 2px solid green;
+        }
+        
+        input:invalid, select:invalid {
+            border: 2px solid rgb(255, 162, 0);
+        }
+        
+        input[type="submit"] {
+            background-color: rgb(33,78,168);
+            color: white;
+            border: 1px solid rgb(33,78,168);
+            border-radius: 5px;
+            padding: 10px 20px; /* adjust as needed */
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 12px; /* adjust as needed */
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+        fieldset {
+            border: 1px solid rgb(167, 193, 245);
+            border-radius: 5px;
+            padding: 10px;
+            margin: 1px;
+        }
+        a {
+            color: white;
+            text-decoration: none;
+        }
+
+        /*A modifier pour que ça s'adapte bien avec le bandeau */
+        #TotalKm{
+            text-align: center;
+            font-weight: bold;
+        }
+        /*Ma proposition d'ajout : transformer le texte fin d'ul en un titre h2 pour + de visibilité*/
+        h2{
+            color: rgb(33,78,168);
+            font-size: 1.2em;
+        }
+
+        /*Gérer le tableau récapitulatif de ce qui a été réalisé comme trajets */
+        section{
+            grid-row: 5;
+        }
+        
+        section table{
+            width: 100%;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        table th, table td, table tr{
+            width: auto;
+            text-align: center;
+        }
+
+        table{
+            border-collapse: collapse;
+        }
+
+        table td{
+            border:solid 1px black;  
+        }
+        table tr th{
+            border:solid 1px black;            
+        }
+        
+        .ligne-recapitulatif{
+            border:solid 1px black;  
+            text-align: center;
+            background-color: rgb(33,78,168);
+            color:white;
+        }
+
+
+    </style>
+</head>
+<!-- NE PAS MODIFIER LE CODE CI-APRES -->
+<body>
+    <header>
+        <h1>Uniconduite</h1>
+    </header>
+    <nav>
+        <div>
+            <div>
+                <span id="login">Log In</span>
+            </div>
+            <div>
+                <span id="newsheet"><strong> Créer une fiche de conduite</strong></span>
+            </div>
+            <div>
+                <span id="stats">Dashboard stastistiques</span>
+            </div>
+        </div>
+    </nav>
+    <aside>
+        <img id="resp-400-image" src="./car.png" alt="Logo" width="400" height="120">
+        
+        <h1>Voici vos stastistiques de conduite</h1>
+    </aside>
+    <article><h2> Nous vous montrons ci-dessous par defaut vos statistiques principales sous formes de diagrammes.<br></h2>
+        <ul>
+            <li>Temps total et temps moyen</li>
+            <li>Distances totales et moyennes</li>
+            <li>Fréquence des conditions de route</li>
+        </ul>
+        <!--EMPLACEMENT DU CODE REACT-->
+        <div id="root">mes diagrames React</div>
+        <!--FIN         DU CODE REACT-->
+        <br><br><br>
+        <h2>Demandez a notre de bot de visualisation de construire vos diagrammes personalisés! </h2>
+        <p> Example : je veux voir la proportion de chaque condition meteo sur l'ensemble des trajets sous forme de camembert.<br></p>
+        <p> Pour cela, veuillez remplir et envoyer le formulaire ci-dessous avec votre souhait de visualisation.</p>
+        <!--EMPLACEMENT DU CODE OPENAI-->
+        
+        <!--FIN         DU CODE OPENAI-->
+
+        <form id="formulaire">
+            
+            <fieldset id="promptfs" class="form-grid">
+                <label for="oaipass">Votre passkey OpenAI API</label>
+                <input value="sk-proj-8U1CizEHObQdLJQd9iuWT3BlbkFJdw2s2fOjPTLkKPkT8qU7" type="text" id="oaipass" name="oaipass" required></input>
+                <label for="prompt">Mes statistiques personalisées avec Chat GPT 3.5</label>
+                <textarea id="prompt" name="prompt" required rows="10" cols="50">[{\"idTrajet\":1,\"duree\":{\"heureDepart\":\"2024-04-16T14:44:00.000Z\",\"heureFin\":\"2024-04-17T14:46:00.000Z\"},\"kilometres\":\"50\",\"conditions\":{\"idConditionMeteo\":\"2\",\"idTypeRoute\":[\"2\",\"3\"],\"idTypeTraffic\":\"2\"},\"manoeuvres\":[\"1\",\"2\"]},{\"idTrajet\":2,\"duree\":{\"heureDepart\":\"2024-04-18T14:47:00.000Z\",\"heureFin\":\"2024-04-20T14:48:00.000Z\"},\"kilometres\":\"109\",\"conditions\":{\"idConditionMeteo\":\"6\",\"idTypeRoute\":[\"3\"],\"idTypeTraffic\":\"3\"},\"manoeuvres\":[\"1\"]}]please highlight the percentage of trips per idConditionMeteo in a piechart</textarea>
+            </fieldset>
+            
+            <div class="no-grid">
+                <br>
+                <input type="submit" value="Envoyer">
+                <br>
+            </div>
+            </form>
+            
+            <div id="response"></div>
+            
+        </article>
+        <section>
+
+        </section>
+        <footer>
+            <div id="contactCell"><span>Uniconduite <br><br>
+                Copyright 2024 - UNISTRA<br> <a href="mailto:info@ecoleoscar.com">info@uniconduite.com</a></span>
+            </div>
+        </footer>
+    </body>
+    </html>
