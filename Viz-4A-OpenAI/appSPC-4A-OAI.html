@@ -141,27 +141,25 @@
         "thread": {
             "messages": [{
                 "role": "user",
-                "content": prompt
+                "content": "here is the data you will analyze:" + enregistrementLocalStorage + " " + prompt + " Please when you plot the data to represent a dimension, don't display the id but rather the name of the dimension, thaa I give you here after :" + JSON.stringify(meteo) + JSON.stringify(typeRoute) + JSON.stringify(typeTraffic) + JSON.stringify(manoeuvres)
             }]
         }
     }),
     responseType: 'json',
     success: function(data) {
-        console.log(data);
+        //console.log(data);
         // On récupère le message de réponse
         // On extrait la valeur de la clé "status" du message de réponse
         var status = data.status;
         var threadId = data.thread_id;
         var runId = data.id;
-        document.getElementById("response").innerHTML = "Bien joué votre requête OpenAI API est:" + status + ", <br> votre diagramme est en cours de construction.<br>Thread ID: " + threadId + "<br>Run Id: " + runId + "<img src='./ld.gif' alt='diagramme' width='70' height='70'>";
+        document.getElementById("response").innerHTML = "<br><br> Bien joué votre requête OpenAI API est:" + status + ", <br> votre diagramme est en cours de construction. <div style=\"text-align:center;\"><img src='./ld.gif' alt='diagramme' width='70' height='70'></div>";
         // Create a function that calls sendRequest with the necessary arguments
         var sendRequestWithArgs = function() {
             sendRequest(threadId, runId, oaipass, intervalId);
+        // Call sendRequestWithArgs every 7000 milliseconds (7 seconds)
         };
-
-    // Call sendRequestWithArgs every 10000 milliseconds (10 seconds)
-    var intervalId = setInterval(sendRequestWithArgs, 10000);
-
+        var intervalId = setInterval(sendRequestWithArgs, 7000);
     },
     error: function(error) {
         console.log('Error:', error);
@@ -180,16 +178,15 @@
             },
             responseType: 'json',
             success: function(data) {
-                console.log(data);
-                console.log(data.status);
+                //console.log(data);
+                //console.log(data.status);
                 // Check if the data is 'complete'
                 if (data.status === 'completed') {
                     // If it is, stop the interval
-                    clearInterval(interval_id);
+                       clearInterval(interval_id);
                        var imageId = getImageId(thread_id, oai_pass);
-                       getImageFile(imageId, oai_pass);
-                       document.getElementById("response").innerHTML = "<img src='./chart.png' alt='diagramme' width='400' height='400'>";
-                }
+                       //console.log(imageId);
+                         }
             },
             error: function(error) {
                 console.log('Error:', error);
@@ -197,6 +194,8 @@
         });
     }
     
+    
+
     function getImageId(thread_id, oai_pass) {
 
         $.ajax({
@@ -206,35 +205,51 @@
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + oai_pass,
                 'OpenAI-Beta': 'assistants=v1',
+                'Accept': 'application/json',
+                'Response-Type': 'json'
             },
-            responseType: 'json',
             success: function(data) {
-                console.log(data);
-            //var imageId = data[0].content[0].image_file.file_id;
-            var imageId = data[0];
-            console.log(imageId);
-                return imageId;
+                try {
+                    var imageFileId = data.data[0].content[0].image_file.file_id;
+                    var gptText = data.data[0].content[1].text.value;
+                    //console.log(imageFileId);
+                    getImageFile(imageFileId, oai_pass, gptText);
+                    return imageFileId;
+                } catch (error) {
+                    document.getElementById("response").innerHTML = "<br><br>Navrés mais notre chatbot n'a pas compris votre requête, veuillez reformuler votre demande et utiliser de préferrence l'anglais.";
+                    console.log('Error:', error);
+                }
+                
             },
             error: function(error) {
+                document.getElementById("response").innerHTML = "<br><br>Navrés mais notre chatbot n'a pas réponsu, veuillez réessayer plus tard ou vérifier votre pass API et vos crédits.";
                 console.log('Error:', error);
             }
         });
     }
 
-        function getImageFile(image_id, oai_pass) {
+        function getImageFile(image_id, o_ai_pass, gpt_text) {
             $.ajax({
-                url: 'https://api.openai.com/v1/files/' + image_id,
+                url: 'https://api.openai.com/v1/files/' + image_id + '/content',
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + oai_pass,
+                    'Content-Type': 'application/octet-stream',
+                    'Authorization': 'Bearer ' + o_ai_pass,
                     'OpenAI-Beta': 'assistants=v1',
                 },
-                responseType: 'blob',
+                xhrFields: {
+                responseType: 'blob'
+                                     },
                 success: function(data) {
-                    console.log(data);
+                    //console.log(data);
                     // Use FileSaver.js to save the blob as chart.png
-                    saveAs(data, "./chart.png");
+                    saveAs(data, "chart.png", {type: 'application/octet-stream'});
+                    
+                    // Create a Blob URL from the data
+                    var url = URL.createObjectURL(data);
+
+                    // Set the src attribute of the img tag to the Blob URL
+                    document.getElementById("response").innerHTML = '<br>' + gpt_text+ '<br><br><img src="' + url + '" alt="diagramme" width="400px">';
                 },
                 error: function(error) {
                     console.log('Error:', error);
@@ -650,7 +665,6 @@
             color:white;
         }
 
-
     </style>
 </head>
 <!-- NE PAS MODIFIER LE CODE CI-APRES -->
@@ -683,10 +697,10 @@
             <li>Fréquence des conditions de route</li>
         </ul>
         <!--EMPLACEMENT DU CODE REACT-->
-        <div id="root">mes diagrames React</div>
+        <div id="root">mes diagrammes React</div>
         <!--FIN         DU CODE REACT-->
         <br><br><br>
-        <h2>Demandez a notre de bot de visualisation de construire vos diagrammes personalisés! </h2>
+        <h2>Demandez a notre de bot de visualisation de construire vos diagrammes personnalisés! </h2>
         <p> Example : je veux voir la proportion de chaque condition meteo sur l'ensemble des trajets sous forme de camembert.<br></p>
         <p> Pour cela, veuillez remplir et envoyer le formulaire ci-dessous avec votre souhait de visualisation.</p>
         <!--EMPLACEMENT DU CODE OPENAI-->
@@ -698,8 +712,8 @@
             <fieldset id="promptfs" class="form-grid">
                 <label for="oaipass">Votre passkey OpenAI API</label>
                 <input value="" type="text" id="oaipass" name="oaipass" required></input>
-                <label for="prompt">Mes statistiques personalisées avec Chat GPT 3.5</label>
-                <textarea id="prompt" name="prompt" required rows="10" cols="50">[{\"idTrajet\":1,\"duree\":{\"heureDepart\":\"2024-04-16T14:44:00.000Z\",\"heureFin\":\"2024-04-17T14:46:00.000Z\"},\"kilometres\":\"50\",\"conditions\":{\"idConditionMeteo\":\"2\",\"idTypeRoute\":[\"2\",\"3\"],\"idTypeTraffic\":\"2\"},\"manoeuvres\":[\"1\",\"2\"]},{\"idTrajet\":2,\"duree\":{\"heureDepart\":\"2024-04-18T14:47:00.000Z\",\"heureFin\":\"2024-04-20T14:48:00.000Z\"},\"kilometres\":\"109\",\"conditions\":{\"idConditionMeteo\":\"6\",\"idTypeRoute\":[\"3\"],\"idTypeTraffic\":\"3\"},\"manoeuvres\":[\"1\"]}]please highlight the percentage of trips per idConditionMeteo in a piechart</textarea>
+                <label for="prompt">Mes statistiques personnalisées avec Chat GPT 3.5</label>
+                <textarea id="prompt" name="prompt" required rows="10" cols="50">please highlight the percentage of trips per idConditionMeteo in a piechart</textarea>
             </fieldset>
             
             <div class="no-grid">
