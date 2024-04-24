@@ -10,7 +10,10 @@ import requests
 import warnings
 warnings.filterwarnings('ignore')
 
-prompt = sys.argv[1]  # Get the prompt from the command line arguments
+# Ce code télécharge le modèle de chatbot DialoGPT de Microsoft et répond à une question donnée en utilisant ce modèle.
+
+# Get the prompt from the command line arguments
+prompt = sys.argv[1]  
 #Sacctoken = sys.argv[2]
 #os.environ['TRANSFORMERS_CACHE'] = './dialogpt'
 #os.environ['HUGGINGFACE_TOKEN'] = ''
