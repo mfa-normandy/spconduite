@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=David+Libre:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/react-vis/dist/style.css">
+    
+
+    <script>
+        window.onload = function() {
+        // format storage // let listeTrajets = [{"idTrajet":1,"duree":{"heureDepart":"2024-03-05T15:00:00.000Z","heureFin":"2024-03-05T16:00:00.000Z"},"kilometres":123,"conditions":{"idConditionMeteo":3,"idTypeRoute":2,"idTypeTraffic":1},"manoeuvres":[0,1]},{"idTrajet":2,"duree":{"heureDepart":"2024-03-06T15:00:00.000Z","heureFin":"2024-03-06T16:00:00.000Z"},"kilometres":107,"conditions":{"idConditionMeteo":1,"idTypeRoute":1,"idTypeTraffic":1},"manoeuvres":[2]}];//variables
+        let meteo = [{"meteoId":1,"temps":"Clair"},{"meteoId":2,"temps":"Nuageux"},{"meteoId":3,"temps":"Couvert"},{"meteoId":4,"temps":"Pluvieux"},{"meteoId":5,"temps":"Brumeux"},{"meteoId":6,"temps":"Neigeux"},{"meteoId":7,"temps":"Orageux"},{"meteoId":8,"temps":"Tempetueux"}];
+        let typeRoute = [{"typeRouteId":1,"typeRouteNom":"Nationale"},{"typeRouteId":2,"typeRouteNom":"Départementale"},{"typeRouteId":3,"typeRouteNom":"Autoroute"},{"typeRouteId":4,"typeRouteNom":"Centre-ville"},{"typeRouteId":5,"typeRouteNom":"Mixte"}];
+        let typeTraffic = [{"traficId":1,"typeTrafic":"Faible"},{"traficId":2,"typeTrafic":"Modéré"},{"traficId":3,"typeTrafic":"Fort"},{"traficId":4,"typeTrafic":"Fluctuant"}];
+        let manoeuvres = [{"manoeuvreId":1,"manoeuvreNom":"Stationnement en épi"},{"manoeuvreId":2,"manoeuvreNom":"Stationnement en bataille"},{"manoeuvreId":3,"manoeuvreNom":"Stationnement en créneau"}];    
+        // //construction des listes
+        // let selectMeteo = document.getElementById("meteo");
+        // let selectRoute = document.getElementById("route");
+        // let selectTrafic = document.getElementById("trafic");
+        // let selectManoeuvre = document.getElementById("manoeuvre");
+        // //meteo
+        // for (let i = 0; i < meteo.length; i++) {
+        //     let option = document.createElement("option");
+        //     option.value = meteo[i].meteoId;
+        //     option.text = meteo[i].temps;
+        //     selectMeteo.appendChild(option);
+        // }
+        // //route
+        // for (let i = 0; i < typeRoute.length; i++) {
+        //     let option = document.createElement("option");
+        //     option.value = typeRoute[i].typeRouteId;
+        //     option.text = typeRoute[i].typeRouteNom;
+        //     selectRoute.appendChild(option);
+        // }
+        // //trafic
+        // for (let i = 0; i < typeTraffic.length; i++) {
+        //     let option = document.createElement("option");
+        //     option.value = typeTraffic[i].traficId;
+        //     option.text = typeTraffic[i].typeTrafic;
+        //     selectTrafic.appendChild(option);
+        // }
+        // //manoeuvres
+        // for (let i = 0; i < manoeuvres.length; i++) {
+        //     let option = document.createElement("option");
+        //     option.value = manoeuvres[i].manoeuvreId;
+        //     option.text = manoeuvres[i].manoeuvreNom;
+        //     selectManoeuvre.appendChild(option);
+        // }
+    
+    
+    // //Selectionner plusieurs manoeuvres
+    // var select = document.getElementById('manoeuvre'); 
+    // select.addEventListener('mousedown', function(e) {
+    //     e.preventDefault();
+    //     var select = this;
+    //     var index = Array.from(select.options).indexOf(e.target);
+    //     if (e.target.tagName.toLowerCase() !== 'option' || index === -1) return;
+    //     select.options[index].selected = !select.options[index].selected;
+    //     return false;
+    //     }
+    // );
+
+    // //Selectionner plusieurs types de routes
+    // var select = document.getElementById('route'); 
+    // select.addEventListener('mousedown', function(e) {
+    //     e.preventDefault();
+    //     var select = this;
+    //     var index = Array.from(select.options).indexOf(e.target);
+    //     if (e.target.tagName.toLowerCase() !== 'option' || index === -1) return;
+    //     select.options[index].selected = !select.options[index].selected;
+    //     return false;
+    //     }
+    // );
+
+    
+
+    
+    //On prépare de quoi accéder à ce qui est déjà stocké dans le localstorage
+    let listeTrajets = localStorage.getItem('trajets') //Avec ça, on récupère le localstorage, au cas où il y ait déjà des trajets enregistrés
+    if(listeTrajets === null){ //On regarde s'il y a des trajets d'enregistré
+       listeTrajets=[] //Devient un tableau vide si 0 trajets enregistrés
+    } else {
+        listeTrajets = JSON.parse(listeTrajets) //Sinon, on retransforme la variable en tableau contenant les trajets du localStorage
+    }
+
+    let totalKm = 0 //Stocke les km parcourus
+
+    
+    var enregistrementLocalStorage = localStorage.getItem('trajets')
+    const trajetParse = JSON.parse(enregistrementLocalStorage)//On retransforme tout en une variable qui contient un objet, si on veut la voir dans le console.log
+
+
+    //Afficher où on en est dans l'apprentissage
+    const objectifKm = 3000; //Définition de l'objectif à atteindre
+
+    if(localStorage.getItem('trajets') !== null){ //On vérifie si il y a déjà des infos dans la key trajets
+        trajetParse.forEach(trajet =>
+            totalKm += Number(trajet.kilometres) //transforme chaque propriétés kilomètres de chaque trajet en un nombre et l'ajoute au total parcouru
+        )
+    }
+    
+    let objectifKmRestant = objectifKm - totalKm
+
+    //Afficher du texte pour les km parcourus
+    
+    if(totalKm > 0){
+            let affichageAvancee = document.querySelector('aside')
+            let nouveauTotalKm = document.createElement("p")
+            nouveauTotalKm.textContent = "Félicitations, vous avez déjà conduit " + totalKm + "km ! Plus que " + objectifKmRestant + " à parcourir !"
+            nouveauTotalKm.id = "TotalKm"
+            affichageAvancee.appendChild(nouveauTotalKm)
+        }
+
+        let compteur = listeTrajets.length+1
+    //Pour insérer des éléments dans le localStorage, il faut prendre le formulaire
+    // var formulaire = document.getElementById("formulaire"); //On récupère le formulaire
+
+    //Fonction pour ajouter des éléments dans le localStorage
+    // formulaire.addEventListener('submit', ()=>{
+    //     // event.preventDefault()
+    //      //Utilisé pour faire l'ID trajet
+        
+    //     //Récupérer la value de la date de départ//
+    //     let nouveauDepart = document.getElementById("date").value
+
+    //     //Récupérer la  value de l'heure de départ//
+    //     let nouveauHeureDepart = document.getElementById("heure").value
+
+    //     //Récupérer la value de la date du retour//
+    //     let nouveauRetour = document.getElementById("dateR").value
+
+    //     //Récupérer la value de l'heure de retour//
+    //     let nouveauHeureRetour = document.getElementById("heureR").value
+
+    //     //Récupérer la value des km parcourus//
+    //     let nouveauKm = document.getElementById("km").value
+
+    //     //Récupérer la value de météo//
+    //     let nouveauMeteo = selectMeteo.value
+
+    //     //Récupérer les values des routes + transformer en tableau//
+    //     let routeOptions = selectRoute.selectedOptions;
+    //     let nouveauRoute = Array.from(routeOptions).map(option => option.value);
+
+    //     //Récupérer la value du trafic//
+    //     let nouveauTrafic = selectTrafic.value
+
+    //     //Récupérer les values des manoeuvres + transformer en tableau
+    //     let manoeuvreOptions = selectManoeuvre.selectedOptions;
+    //     let nouveauManoeuvre = Array.from(manoeuvreOptions).map(option => option.value);
+
+    //     //On définit d'abord les bons formats pour les dates//
+    //     nouveauDepart = new Date(nouveauDepart)
+    //     let nouveauDepartString = nouveauDepart.toISOString().split('T')[0];
+    //     let nouveauHeureDepartString = nouveauHeureDepart + ':00.000Z';
+    //     let heureDepart = nouveauDepartString + 'T' + nouveauHeureDepartString
+
+    //     nouveauRetour = new Date(nouveauRetour)
+    //     let nouveauRetourString = nouveauRetour.toISOString().split('T')[0];
+    //     let nouveauHeureRetourString = nouveauHeureRetour + ':00.000Z';
+    //     let heureFin = nouveauRetourString + 'T' + nouveauHeureRetourString
+
+    //     //On donne le format d'un nouveau trajet
+    //     const nouveauTrajet = {
+    //         "idTrajet":compteur,
+    //         "duree":{
+    //             "heureDepart":heureDepart,
+    //             "heureFin":heureFin
+    //         },
+    //         "kilometres":nouveauKm,
+    //         "conditions":
+    //         {
+    //             "idConditionMeteo":nouveauMeteo,
+    //             "idTypeRoute":nouveauRoute,
+    //             "idTypeTraffic":nouveauTrafic
+    //         },
+    //         "manoeuvres":nouveauManoeuvre
+    //     }
+
+    //     //On l'ajoute au tableau de listeTrajets, défini avant la fonction
+    //     listeTrajets.push(nouveauTrajet)
+        
+    //     //Ici, c'est l'enregistrement dans le localstorage
+    //     const listeTrajetsJSON = JSON.stringify(listeTrajets)
+    //     localStorage.setItem('trajets', listeTrajetsJSON) //On les enregistre dans le localstorage
+    // })
+
+    //Afficher l'avancée en km//
+    // let affichageNumeroFiche = document.querySelector("h2")
+    // affichageNumeroFiche.textContent = "Ma sortie conduite accompagnée numéro #" + compteur
+
+    // //Faire un tableau récapitulatif des derniers trajets
+    // //On commence par définir les variables qui auront les différents éléments
+    // let creationTableau = document.querySelector("section")
+    // let tableau = document.createElement("table")
+    // let entete = document.createElement("tr")
+
+    // //Besoin de faire un tableau de correspondance//
+    // let tableauEntete = ["ID Trajet", "Jour de départ", "Durée", "Distance parcourue"]
+
+    // tableauEntete.forEach(function(propriete){
+    //     let celluleEnTete = document.createElement("th");
+    //     celluleEnTete.textContent = propriete;
+    //     entete.appendChild(celluleEnTete);
+    // })
+
+    // tableau.appendChild(entete)
+
+    // //Ici je mets un séparateur pour le récapitulatif des expériences
+    // let ligneRecap = document.createElement("tr")
+    // let celluleRecap = document.createElement("td")
+    // celluleRecap.textContent = 'Avancée générale'
+    // celluleRecap.setAttribute('colspan', tableauEntete.length)
+    // ligneRecap.classList.add('ligne-recapitulatif')
+    // ligneRecap.appendChild(celluleRecap)
+    // tableau.appendChild(ligneRecap)    
+
+    // let totalMillisecondes = 0 //Permet de savoir combien d'heure de conduite ont été réalisées
+
+    // listeTrajets.forEach(function(trajet){ //On fait une ligne récap en haut du tableau
+    //     let heureDepart = new Date(trajet.duree.heureDepart)
+    //     let heureFin = new Date(trajet.duree.heureFin)
+    //     let differenceMillisecondes = heureFin - heureDepart
+    //     totalMillisecondes += differenceMillisecondes
+    // })
+
+    // let ligneRecapContent = document.createElement("tr") //Début du calcul des heures de conduites réalisées, on va récupérer les heures et minutes
+    // let totalHeure = Math.floor(totalMillisecondes / 3600000) 
+    // totalMillisecondes %= 3600000
+    // let totalMinutes = Math.floor(totalMillisecondes / 60000)
+
+    // let celluleRecapKm = document.createElement("td") //Ajout de la cellule pour montrer les km
+    // celluleRecapKm.textContent= totalKm + "km" 
+    // celluleRecapKm.setAttribute('colspan', tableauEntete.length/2)
+    
+    // let celluleRecapDuree = document.createElement("td") //Ajout de la cellule pour montrer le temps conduit
+    // celluleRecapDuree.textContent = totalHeure + "h " + totalMinutes + "min" 
+    // celluleRecapDuree.setAttribute('colspan', tableauEntete.length/2)
+
+    // ligneRecapContent.appendChild(celluleRecapDuree)
+    // ligneRecapContent.appendChild(celluleRecapKm)
+
+    // tableau.appendChild(ligneRecapContent) 
+
+    // listeTrajets.reverse() //On veut afficher les plus récentes en premier
+
+    // listeTrajets.forEach(function(trajet){//La on fait le détail de chaque trajet
+
+    //     //On récupère l'ID//
+    //     let ligne = document.createElement("tr")
+    //     let celluleIdTrajet = document.createElement("td")
+    //     celluleIdTrajet.textContent = trajet.idTrajet
+    //     ligne.appendChild(celluleIdTrajet)
+        
+    //     //On récupère la date de départ//
+    //     let celluleJourDepart = document.createElement("td")
+    //     let valeurJourDepart = new Date(trajet.duree.heureDepart)
+    //     let jourDepart = valeurJourDepart.getDate()
+    //     let moisDepart = valeurJourDepart.getMonth()+1
+    //     let anneeDepart = valeurJourDepart.getFullYear()
+    //     celluleJourDepart.textContent = jourDepart + "/" + moisDepart + "/" + anneeDepart
+    //     ligne.appendChild(celluleJourDepart)
+
+
+    //     //On récupère et calcule la durée du trajet//
+    //     let celluleDuree = document.createElement("td")
+    //     let calculDepart = new Date(trajet.duree.heureDepart)
+    //     let calculRetour = new Date(trajet.duree.heureFin)
+    //     let differenceMillisecondes = calculRetour - calculDepart
+    //     let heure = Math.floor(differenceMillisecondes / 3600000)
+    //     differenceMillisecondes %= 3600000
+    //     let minutes = Math.floor(differenceMillisecondes / 60000)
+    //     differenceMillisecondes %= 60000
+    //     let secondes = Math.floor(differenceMillisecondes / 1000)
+    //     if (heure > 0){
+    //         celluleDuree.textContent = heure + "h " + minutes + "min " + secondes + "s"
+    //     } else {
+    //         celluleDuree.textContent = minutes + "min " + secondes + "s"
+    //     }
+    //     ligne.appendChild(celluleDuree)
+
+        
+    //     //On récupère les km parcourus//
+    //     let celluleKm = document.createElement("td")
+    //     celluleKm.textContent = trajet.kilometres + "km"
+    //     ligne.appendChild(celluleKm)
+
+
+    //     tableau.appendChild(ligne)
+    // })
+
+     
+
+    // creationTableau.appendChild(tableau)
+    
+    //Ici j'essaye de voir pour utiliser le framework React-VIS d'Uber (https://github.com/uber/react-vis/)//
+    
+}
+
+    </script>
+    
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone@7.24.4/babel.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/react-vis/dist/style.css">
+    <script type="text/javascript" src="https://unpkg.com/react-vis/dist/dist.min.js"></script>
+
+    <script type="text/babel">
+        const {
+            ArcSeries,
+            DiscreteColorLegend,
+            VerticalBarSeries, 
+            RadialChart,
+            LabelSeries,
+            XYPlot,
+            HorizontalGridLines,
+            LineSeries,
+            XAxis,
+            YAxis
+        } = reactVis
+
+    //Premier essai : un tableau permettant de visualiser les km parcourus par trajet
+    function ChartKm({dataKm}) {
+        // Permet de trouver et définir la valeur max d'Y
+        const maxYValue = Math.max(...dataKm.map(point => point.y))
+        
+        // On doit définir l'écart de valeur de yDomain (0 à valeur max)
+        const yDomain = [0, maxYValue]
+
+        return (
+            <div>
+                <p><strong>Visualisation des kilomètres réalisés par trajets :</strong></p>
+                <XYPlot
+                    width={400}
+                    height={400}
+                    yDomain={yDomain} //On réutilise la const yDomain pour définir l'étendu du tableau
+                    >
+                    <HorizontalGridLines />
+                    <LineSeries
+                        data={dataKm} //Il y a besoin d'asigner la variable data à cette variable(?) qui s'appelle aussi data. A étudier plus tard pour comprendre
+                    />
+                    <XAxis />
+                    <YAxis />
+                </XYPlot>
+            </div>
+            
+        )
+        }
+
+    let listeTrajetsVisualisation = JSON.parse(localStorage.getItem('trajets'))
+
+    const dataKm = []; //Il s'agit de la constante qui va stocker les objets km avec les id associés
+    //On définit ensuite les variables qui stockent les x et les y (id et km)
+    let localStorageKm = []
+    let localStorageId = []
+    
+    listeTrajetsVisualisation.forEach(function(trajet){
+        localStorageKm.push(trajet.kilometres) 
+    })
+
+    listeTrajetsVisualisation.forEach(function(trajet){
+        localStorageId.push(trajet.idTrajet) 
+    })
+
+    console.log(localStorageKm)
+    console.log(localStorageId)
+
+
+    for(let index=0 ; index < localStorageKm.length; index++){ //On va ajouter chaque valeur km pour faire le tableau
+        const ajout= {
+            x:localStorageId[index],
+            y:localStorageKm[index]
+        }
+        dataKm.push(ajout)
+    }
+
+    dataKm.sort((a, b) => a.x - b.x); //permet de trier dans l'ordre les entrées pour éviter d'avoir une confusion et plusieurs lignes
+
+    const chartKm = <ChartKm dataKm={dataKm} />
+    ReactDOM.render(chartKm, document.querySelector('#root-km')) //Endroit où on envoie le graphique des km parcourus
+
+    //Deuxième essai : visualiser le nombre de trajet réalisés par différentes conditions de stationnement
+
+        function ChartStationnement({data}) {
+        return (
+            <div>
+                <p><strong>Les exercices de stationnement réalisés :</strong></p>
+                <XYPlot width={400} height={300}>
+                    <ArcSeries 
+                        data={datastationnement} 
+                        colorDomain={[0, 1, 2]} 
+                        colorRange={['blue', 'pink', 'red']} 
+                        colorType='linear'
+                        />
+                        <LabelSeries data={datastationnement.map(item => ({ ...item, label: item.label }))} />
+                </XYPlot>
+            </div>
+        )
+        }
+
+        let localStorageStationnementEpi=0
+        let localStorageStationnementBataille=0
+        let localStorageStationnementCreneau=0
+
+        listeTrajetsVisualisation.forEach(function(trajet){
+            if(trajet.manoeuvres.includes('1')){
+                localStorageStationnementEpi++
+            }
+            if(trajet.manoeuvres.includes('2')){
+                localStorageStationnementBataille++
+            }
+            if(trajet.manoeuvres.includes('3')){
+                localStorageStationnementCreneau++
+            }
+        })
+        console.log(localStorageStationnementEpi)
+        console.log(localStorageStationnementBataille)
+        console.log(localStorageStationnementCreneau)
+
+        const totalStationnement = localStorageStationnementEpi + localStorageStationnementBataille + localStorageStationnementCreneau
+        const camembertRadius = 150
+
+        const datastationnement = [
+            {
+                angle0: 0,
+                angle: (localStorageStationnementEpi / totalStationnement) * (Math.PI * 2),
+                radius: camembertRadius,
+                color: 0,
+                label: `Epi: ${localStorageStationnementEpi} stationnements réalisés`
+            },
+            {
+                angle0: (localStorageStationnementEpi / totalStationnement) * (Math.PI * 2),
+                angle: ((localStorageStationnementEpi + localStorageStationnementBataille) / totalStationnement) * (Math.PI * 2),
+                radius:camembertRadius,
+                color: 1,
+                label: `Bataille: ${localStorageStationnementBataille} stationnements réalisés`
+            },
+            {
+                angle0: ((localStorageStationnementEpi + localStorageStationnementBataille) / totalStationnement) * (Math.PI * 2),
+                angle: Math.PI * 2,
+                radius: camembertRadius,
+                color: 2,
+                label: `Creneau: ${localStorageStationnementCreneau} stationnements réalisés`
+            }
+        ]
+
+        const chartStationnement = <ChartStationnement data={datastationnement}/>
+        ReactDOM.render(chartStationnement, document.querySelector('#root-stationnement'))
+
+        //Troisième essai  : visualiser les données type de route
+        function ChartTypeRoute({data}){
+            return (
+                <div>
+                    <p><strong>Tableau présentant le nombre de fois où des types de routes ont été parcourus:</strong></p>
+                    <XYPlot
+                        width={400}
+                        height={300}>
+                        <DiscreteColorLegend 
+                            orientation="horizontal"
+                            items={[
+                                {title: 'Nationale', color: 'blue'},
+                                {title: 'Departementale', color: 'green'},
+                                {title: 'Autoroute', color: 'red'},
+                                {title: 'Centre-ville', color: 'orange'},
+                                {title: 'Route mixte', color: 'purple'}
+                            ]}
+                        />
+                        <HorizontalGridLines />
+                        <YAxis />
+                        {data.map((bar, index) => (
+                            <VerticalBarSeries key={index} data={[bar]} color={bar.color} barWidth={0.5} />
+                        ))}
+                    </XYPlot>
+                </div>
+        )}
+
+        let localStorageRouteNationale=0
+        let localStorageRouteDepartementale=0
+        let localStorageRouteAutoroute=0
+        let localStorageRouteCentre=0
+        let localStorageRouteMixte=0
+
+        listeTrajetsVisualisation.forEach(function(trajet){
+            if(trajet.conditions.idTypeRoute.includes('1')){
+                localStorageRouteNationale++
+            }
+            if(trajet.conditions.idTypeRoute.includes('2')){
+                localStorageRouteDepartementale++
+            }
+            if(trajet.conditions.idTypeRoute.includes('3')){
+                localStorageRouteAutoroute++
+            }
+            if(trajet.conditions.idTypeRoute.includes('4')){
+                localStorageRouteCentre++
+            }
+            if(trajet.conditions.idTypeRoute.includes('5')){
+                localStorageRouteMixte++
+            }
+        })
+
+        const data = [
+            {x: 1, y: localStorageRouteNationale, color:'blue'},
+            {x: 2, y: localStorageRouteDepartementale, color:'green'},
+            {x: 3, y: localStorageRouteAutoroute, color:'red'},
+            {x: 4, y: localStorageRouteCentre, color:'orange'},
+            {x: 5, y: localStorageRouteMixte, color:'purple'}
+        ]
+
+        const colors = ['blue', 'green', 'red', 'orange', 'purple']
+
+        const chart = <ChartTypeRoute data={data}/>
+        ReactDOM.render(chart, document.querySelector('#root-route'))
+
+        //Quatrième : on fait la météo//
+
+        function ChartTypeMeteo({data}){
+            return (
+                <div>
+                    <p><strong>Tableau présentant le nombre de fois où il y a eu des expériences de conduites sous différentes conditions météo:</strong></p>
+                    <XYPlot
+                        width={400}
+                        height={300}
+                        cluster={'bar'}>
+                        <DiscreteColorLegend 
+                            orientation="horizontal"
+                            items={[
+                                {title: 'Clair', color: 'blue'},
+                                {title: 'Nuageux', color: 'green'},
+                                {title: 'Couvert', color: 'red'},
+                                {title: 'Pluvieux', color: 'orange'}
+                            ]}
+                        />
+                        <DiscreteColorLegend 
+                            orientation="horizontal"
+                            items={[
+                                {title: 'Brumeux', color: 'purple'},
+                                {title: 'Neigeux', color: 'brown'},
+                                {title: 'Orageux', color: 'yellow'},
+                                {title: 'Tempetueux', color: 'pink'}
+                            ]}
+                        />
+                        <HorizontalGridLines />
+                        <YAxis />
+                        {dataMeteo.map((bar, index) => (
+                            <VerticalBarSeries key={index} data={[bar]} color={bar.color} barWidth={0.6} />
+                        ))}
+                    </XYPlot>
+                </div>
+        )}
+
+        let localStorageMeteoClair=0
+        let localStorageMeteoNuageux=0
+        let localStorageMeteoCouvert=0
+        let localStorageMeteoPluvieux=0
+        let localStorageMeteoBrumeux=0
+        let localStorageMeteoNeigeux=0
+        let localStorageMeteoOrageux=0
+        let localStorageMeteoTempetueux=0
+
+        listeTrajetsVisualisation.forEach(function(trajet){
+            if(trajet.conditions.idConditionMeteo == 1){
+                localStorageMeteoClair++
+            }
+            if(trajet.conditions.idConditionMeteo == 2){
+                localStorageMeteoNuageux++
+            }
+            if(trajet.conditions.idConditionMeteo == 3){
+                localStorageMeteoCouvert++
+            }
+            if(trajet.conditions.idConditionMeteo == 4){
+                localStorageMeteoPluvieux++
+            }
+            if(trajet.conditions.idConditionMeteo == 5){
+                localStorageMeteoBrumeux++
+            }
+            if(trajet.conditions.idConditionMeteo == 6){
+                localStorageMeteoNeigeux++
+            }
+            if(trajet.conditions.idConditionMeteo == 7){
+                localStorageMeteoOrageux++
+            }
+            if(trajet.conditions.idConditionMeteo == 8){
+                localStorageMeteoTempetueux++
+            }
+        })
+
+        const dataMeteo = [
+            {x: 1, y: localStorageMeteoClair, color:'blue'},
+            {x: 2, y: localStorageMeteoNuageux, color:'green'},
+            {x: 3, y: localStorageMeteoCouvert, color:'red'},
+            {x: 4, y: localStorageMeteoPluvieux, color:'orange'},
+            {x: 5, y: localStorageMeteoBrumeux, color:'purple'},
+            {x: 6, y: localStorageMeteoNeigeux, color:'brown'},
+            {x: 7, y: localStorageMeteoOrageux, color:'yellow'},
+            {x: 8, y: localStorageMeteoTempetueux, color:'pink'}
+        ]
+
+        const chartMeteo = <ChartTypeMeteo data={data}/>
+        ReactDOM.render(chartMeteo, document.querySelector('#root-meteo'))
+
+        //Cinquième : les types de trafic//
+
+        function ChartTrafic({data}) {
+        return (
+            <div>
+                <p><strong>Les exercices de stationnement réalisés :</strong></p>
+                <XYPlot width={400} height={300}>
+                    <DiscreteColorLegend 
+                            orientation="horizontal"
+                            items={[
+                                {title: 'Trafic faible', color: 'blue'},
+                                {title: 'Trafic modéré', color: 'pink'},
+                                {title: 'Trafic fort', color: 'red'},
+                                {title: 'Trafic fluctuant', color: 'green'}
+                            ]}
+                        />
+                    <ArcSeries 
+                        data={data} 
+                        colorDomain={[0, 1, 2, 3]} 
+                        colorRange={['blue', 'pink', 'red', 'green']} 
+                        />
+                        <LabelSeries data={data.map(item => ({ ...item, label: item.label }))} />
+                </XYPlot>
+            </div>
+        )
+        }
+
+        let localStorageTraficFaible=0
+        let localStorageTraficModere=0
+        let localStorageTraficFort=0
+        let localStorageTraficFluctuant=0
+
+        listeTrajetsVisualisation.forEach(function(trajet){
+            if(trajet.conditions.idTypeTraffic == '1'){
+                localStorageTraficFaible++
+            }
+            if(trajet.conditions.idTypeTraffic == '2'){
+                localStorageTraficModere++
+            }
+            if(trajet.conditions.idTypeTraffic == '3'){
+                localStorageTraficFort++
+            }
+            if(trajet.conditions.idTypeTraffic == '4'){
+                localStorageTraficFluctuant++
+            }
+        })
+    
+
+        const totalTrafic = localStorageTraficFaible + localStorageTraficModere + localStorageTraficFort + localStorageTraficFluctuant
+
+        const datatrafic = [
+            {
+                angle0: 0,
+                angle: (localStorageTraficFaible / totalTrafic) * Math.PI * 2,
+                radius: camembertRadius,
+                color: 0,
+                label: `${localStorageTraficFaible} conduites en trafic faible`
+            },
+            {
+                angle0: (localStorageTraficFaible / totalTrafic) * Math.PI * 2,
+                angle: ((localStorageTraficFaible + localStorageTraficModere) / totalTrafic) * Math.PI * 2,
+                radius: camembertRadius,
+                color: 1,
+                label: `${localStorageTraficModere} conduites en trafic modéré`
+            },
+            {
+                angle0: ((localStorageTraficFaible + localStorageTraficModere) / totalTrafic) * Math.PI * 2,
+                angle: ((localStorageTraficFaible + localStorageTraficModere + localStorageTraficFort) / totalTrafic) * Math.PI * 2,
+                radius: camembertRadius,
+                color: 2,
+                label: `${localStorageTraficFort} conduites en trafic fort`
+            },
+            {
+                angle0: ((localStorageTraficFaible + localStorageTraficModere + localStorageTraficFort) / totalTrafic) * Math.PI * 2,
+                angle: Math.PI * 2,
+                radius: camembertRadius,
+                color: 3,
+                label: `${localStorageTraficFluctuant} conduites en trafic fluctuant`
+            }
+        ]
+
+        const chartTrafic = <ChartTrafic data={datatrafic}/>;
+        ReactDOM.render(chartTrafic, document.querySelector('#root-trafic'));
+        
+
+    </script>
+
+    <style>
+        * {    
+            box-sizing: border-box;
+        }
+        body {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+            height: 100vh; /* Subtract double the gridgap from the height */
+            width: 400px; /* Subtract double the gridgap from the width */
+            /* margin:10px;*/
+            margin-left:auto;
+            margin-right:auto;
+            /*grid-gap:15px;*/
+            
+        }
+        header {
+            grid-column: 1;
+            grid-row: 1;
+            width: 400px;
+            padding: 5px;
+            background-color: rgb(33,78,168);
+            color: white;
+            font-family: David Libre, sans-serif;
+            font-size: 0.8em;
+            text-align: center;
+            height: auto;
+        }
+        /*
+        nav {
+            grid-column: 1;
+            grid-row: 2;
+            width: 400px;
+            background-color: rgb(33,78,168);
+            padding-right: 5px;
+            padding-bottom: 5px;
+            text-align: right;
+        }
+        nav table { 
+            width: 400px;
+            height: 100%;
+        }
+        */
+        
+        nav {
+            grid-column: 1;
+            grid-row: 2;
+            width: 400px;
+            background-color: rgb(33,78,168);
+            padding-right: 5px;
+            padding-bottom: 5px;
+            text-align: right;
+            display: flex; /* Add this line to make the nav a flex container */
+            flex-direction: column; /* Add this line if you want the items to stack vertically */
+        }
+        
+        nav div { /* Replaced 'table' with 'div' */
+            width: 100%;
+            height: 95%;
+            display: flex;
+            justify-content: right;
+        }
+
+        nav div span {
+            text-align: center;
+            background-color: rgb(33,78,168);
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 0.7em;
+            padding: 5px;
+            border: 1px solid white;
+            border-radius: 5px;
+            width: auto;
+            height:auto;
+
+        }
+
+        
+        aside {
+            grid-column: 1;
+            grid-row: 3;
+            position: relative;
+            width: 400px; /* adjust as needed */
+            
+        }
+        aside h1 {
+            position: absolute;
+            top: -15px;
+            /* transform: translate(-50%, -50%);*/
+            color: rgb(33,78,168); /* adjust as needed */
+            background-color: white;
+            opacity: 0.8;
+            width: 400px;
+            text-align: center;
+            font-family: David Libre, sans-serif;
+            font-size: 20px;
+        }
+        aside img {
+            width: 400px;
+            height: 120px;  /*REGLE LE PROBLEME D'IMAGE*/
+        }
+        
+        #newsheet {
+            background-color: rgb(255, 255, 255);
+            color: rgb(33, 78, 168);
+        }
+        
+        
+        article {
+            grid-column: 1 ;
+            grid-row: 4;
+            padding: 5px;
+            width: 400px;
+        }
+        
+        footer {
+            /* grid-column: 1; */ 
+            grid-row: 7 ;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 1em;
+            padding: 15px;
+            width: 400px;
+            height: 10vh;
+            background-color: rgb(33,78,168);
+            margin-top: 120px; /*Rajout de la marge pour une question d'erreur avec le pied de graphiques */
+        }
+        
+        div.root{ /*rajout de la marge pour les pieds de graphique*/
+            margin-top:120px;
+            margin-bottom: 120px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: 1fr;
+            gap: 1px;
+        }
+        
+        label {
+            grid-column: 1;
+            height: 30px;
+        }
+        
+        input  {
+            grid-column: 2;
+            height: 30px;
+        }
+        
+        input:valid, select:valid {
+            border: 2px solid green;
+        }
+        
+        input:invalid, select:invalid {
+            border: 2px solid rgb(255, 162, 0);
+        }
+        
+        input[type="submit"] {
+            background-color: rgb(33,78,168);
+            color: white;
+            border: 1px solid rgb(33,78,168);
+            border-radius: 5px;
+            padding: 10px 20px; /* adjust as needed */
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 12px; /* adjust as needed */
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+        fieldset {
+            border: 1px solid rgb(167, 193, 245);
+            border-radius: 5px;
+            padding: 10px;
+            margin: 1px;
+        }
+        a {
+            color: white;
+            text-decoration: none;
+        }
+
+        /*A modifier pour que ça s'adapte bien avec le bandeau */
+        #TotalKm{
+            text-align: center;
+            font-weight: bold;
+        }
+        /*Ma proposition d'ajout : transformer le texte fin d'ul en un titre h2 pour + de visibilité*/
+        h2{
+            color: rgb(33,78,168);
+            font-size: 1.2em;
+        }
+
+        /*Gérer le tableau récapitulatif de ce qui a été réalisé comme trajets */
+        section{
+            grid-row: 5;
+        }
+        
+        section table{
+            width: 100%;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        table th, table td, table tr{
+            width: auto;
+            text-align: center;
+        }
+
+        table{
+            border-collapse: collapse;
+        }
+
+        table td{
+            border:solid 1px black;  
+        }
+        table tr th{
+            border:solid 1px black;            
+        }
+        
+        .ligne-recapitulatif{
+            border:solid 1px black;  
+            text-align: center;
+            background-color: rgb(33,78,168);
+            color:white;
+        }
+
+
+    </style>
+</head>
+<!-- NE PAS MODIFIER LE CODE CI-APRES -->
+<body>
+    <header>
+        <h1>Uniconduite</h1>
+    </header>
+    <nav>
+        <div>
+            <div>
+                <span id="login">Log In</span>
+            </div>
+            <div>
+                <a href="appSPC-4.html"><span id="newsheet"><strong> Créer une fiche de conduite</strong></span></a>
+            </div>
+            <div>
+                <a href="dashboard.html"> <span id="stats">Dashboard stastistiques</span> </a>
+            </div>
+        </div>
+    </nav>
+    <aside>
+        <img id="resp-400-image" src="./car.png" alt="Logo" width="400" height="120">
+        
+        <h1>Résumé de vos expériences de conduite</h1>
+    </aside>
+  
+        <section class="root">
+            <div id="root-km" class="root">
+
+            </div>
+            <div id="root-stationnement" class="root">
+
+            </div>
+            <div id="root-route" class="root">
+
+            </div>
+            <div id="root-meteo" class="root">
+
+            </div>
+            <div id="root-trafic" class="root">
+
+            </div>
+        </section>
+        <footer>
+            <div id="contactCell"><span>Uniconduite <br><br>
+                Copyright 2024 - UNISTRA<br> <a href="mailto:info@ecoleoscar.com">info@uniconduite.com</a></span>
+            </div>
+        </footer>
+    </body>
+    
+    </html>
