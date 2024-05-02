@@ -312,6 +312,7 @@
     <script type="text/babel">
         const {
             ArcSeries,
+            AreaSeries,
             DiscreteColorLegend,
             VerticalBarSeries, 
             RadialChart,
@@ -319,6 +320,7 @@
             XYPlot,
             HorizontalGridLines,
             LineSeries,
+            FlexibleXYPlot,
             XAxis,
             YAxis
         } = reactVis
@@ -333,7 +335,7 @@
 
         return (
             <div>
-                <p><strong>Visualisation des kilomètres réalisés par trajets :</strong></p>
+                <h2>Visualisation des kilomètres réalisés par trajets</h2>
                 <XYPlot
                     width={400}
                     height={400}
@@ -347,7 +349,6 @@
                     <YAxis />
                 </XYPlot>
             </div>
-            
         )
         }
 
@@ -387,17 +388,33 @@
 
         function ChartStationnement({data}) {
         return (
-            <div>
-                <p><strong>Les exercices de stationnement réalisés :</strong></p>
-                <XYPlot width={400} height={300}>
+            <div style={{width: '400px', height: '300px'}}>
+                <h2>Les exercices de stationnement réalisés</h2>
+                <RadialChart
+                data={datastationnement}
+                width={400}
+                height={280}  >
+                    <DiscreteColorLegend 
+                            orientation="horizontal"
+                            items={[
+                                {title: `Stationnement en epi : ${localStorageStationnementEpi}`, color: '#214EA8'},
+                                {title: `Stationnement en bataille : ${localStorageStationnementBataille}`, color: '#00A288'}
+                            ]}
+                    />
+                    <DiscreteColorLegend 
+                            orientation="horizontal"
+                            items={[
+                                {title: `Stationnement en créneau : ${localStorageStationnementCreneau}`, color: '#29C62F'}
+                            ]}
+                    />
                     <ArcSeries 
                         data={datastationnement} 
-                        colorDomain={[0, 1, 2]} 
-                        colorRange={['blue', 'pink', 'red']} 
+                        colorDomain={[0, 1, 2, 3, 4, 5, 6]} 
+                        colorRange={['#214EA8', '#00A288', '#29C62F']} 
                         colorType='linear'
                         />
-                        <LabelSeries data={datastationnement.map(item => ({ ...item, label: item.label }))} />
-                </XYPlot>
+                        <LabelSeries data={datastationnement.map(item => ({ ...item, label: item.label }))} />     
+                </RadialChart>
             </div>
         )
         }
@@ -417,12 +434,13 @@
                 localStorageStationnementCreneau++
             }
         })
+        
         console.log(localStorageStationnementEpi)
         console.log(localStorageStationnementBataille)
         console.log(localStorageStationnementCreneau)
 
         const totalStationnement = localStorageStationnementEpi + localStorageStationnementBataille + localStorageStationnementCreneau
-        const camembertRadius = 150
+        const camembertRadius = 100
 
         const datastationnement = [
             {
@@ -430,21 +448,18 @@
                 angle: (localStorageStationnementEpi / totalStationnement) * (Math.PI * 2),
                 radius: camembertRadius,
                 color: 0,
-                label: `Epi: ${localStorageStationnementEpi} stationnements réalisés`
             },
             {
                 angle0: (localStorageStationnementEpi / totalStationnement) * (Math.PI * 2),
                 angle: ((localStorageStationnementEpi + localStorageStationnementBataille) / totalStationnement) * (Math.PI * 2),
                 radius:camembertRadius,
                 color: 1,
-                label: `Bataille: ${localStorageStationnementBataille} stationnements réalisés`
             },
             {
                 angle0: ((localStorageStationnementEpi + localStorageStationnementBataille) / totalStationnement) * (Math.PI * 2),
                 angle: Math.PI * 2,
                 radius: camembertRadius,
                 color: 2,
-                label: `Creneau: ${localStorageStationnementCreneau} stationnements réalisés`
             }
         ]
 
@@ -455,18 +470,23 @@
         function ChartTypeRoute({data}){
             return (
                 <div>
-                    <p><strong>Tableau présentant le nombre de fois où des types de routes ont été parcourus:</strong></p>
+                    <h2>Tableau présentant le nombre de fois où des types de routes ont été parcourus</h2>
                     <XYPlot
                         width={400}
                         height={300}>
                         <DiscreteColorLegend 
                             orientation="horizontal"
                             items={[
-                                {title: 'Nationale', color: 'blue'},
-                                {title: 'Departementale', color: 'green'},
-                                {title: 'Autoroute', color: 'red'},
-                                {title: 'Centre-ville', color: 'orange'},
-                                {title: 'Route mixte', color: 'purple'}
+                                {title: `Nationale : ${localStorageRouteNationale}`, color: '#214EA8'},
+                                {title: `Departementale : ${localStorageRouteDepartementale}`, color: 'green'},
+                                {title: `Autoroute : ${localStorageRouteAutoroute}`, color: '#00A288'}
+                            ]}
+                        />
+                        <DiscreteColorLegend 
+                            orientation="horizontal"
+                            items={[
+                                {title: `Centre-ville : ${localStorageRouteCentre}`, color: '#00879A'},
+                                {title: `Route mixte : ${localStorageRouteMixte}`, color: '#29C62F'}
                             ]}
                         />
                         <HorizontalGridLines />
@@ -503,14 +523,12 @@
         })
 
         const data = [
-            {x: 1, y: localStorageRouteNationale, color:'blue'},
+            {x: 1, y: localStorageRouteNationale, color:'#214EA8'},
             {x: 2, y: localStorageRouteDepartementale, color:'green'},
-            {x: 3, y: localStorageRouteAutoroute, color:'red'},
-            {x: 4, y: localStorageRouteCentre, color:'orange'},
-            {x: 5, y: localStorageRouteMixte, color:'purple'}
+            {x: 3, y: localStorageRouteAutoroute, color:'#00A288'},
+            {x: 4, y: localStorageRouteCentre, color:'#00879A'},
+            {x: 5, y: localStorageRouteMixte, color:'#29C62F'}
         ]
-
-        const colors = ['blue', 'green', 'red', 'orange', 'purple']
 
         const chart = <ChartTypeRoute data={data}/>
         ReactDOM.render(chart, document.querySelector('#root-route'))
@@ -520,7 +538,7 @@
         function ChartTypeMeteo({data}){
             return (
                 <div>
-                    <p><strong>Tableau présentant le nombre de fois où il y a eu des expériences de conduites sous différentes conditions météo:</strong></p>
+                    <h2>Tableau présentant le nombre d'expériences de conduites sous différentes conditions météo</h2>
                     <XYPlot
                         width={400}
                         height={300}
@@ -528,19 +546,19 @@
                         <DiscreteColorLegend 
                             orientation="horizontal"
                             items={[
-                                {title: 'Clair', color: 'blue'},
-                                {title: 'Nuageux', color: 'green'},
-                                {title: 'Couvert', color: 'red'},
-                                {title: 'Pluvieux', color: 'orange'}
+                                {title: `Clair : ${localStorageMeteoClair}`, color: '#214EA8'},
+                                {title: `Nuageux : ${localStorageMeteoNuageux}`, color: 'green'},
+                                {title: `Couvert : ${localStorageMeteoCouvert}`, color: '#08C6E0'},
+                                {title: `Pluvieux : ${localStorageMeteoPluvieux}`, color: '#00A288'}
                             ]}
                         />
                         <DiscreteColorLegend 
                             orientation="horizontal"
                             items={[
-                                {title: 'Brumeux', color: 'purple'},
-                                {title: 'Neigeux', color: 'brown'},
-                                {title: 'Orageux', color: 'yellow'},
-                                {title: 'Tempetueux', color: 'pink'}
+                                {title: `Brumeux : ${localStorageMeteoBrumeux}`, color: '#086AE0'},
+                                {title: `Neigeux : ${localStorageMeteoNeigeux}`, color: '#00879A'},
+                                {title: `Orageux : ${localStorageMeteoOrageux}`, color: '#22E09A'},
+                                {title: `Tempetueux : ${localStorageMeteoTempetueux}`, color: '#29C62F'}
                             ]}
                         />
                         <HorizontalGridLines />
@@ -589,14 +607,14 @@
         })
 
         const dataMeteo = [
-            {x: 1, y: localStorageMeteoClair, color:'blue'},
+            {x: 1, y: localStorageMeteoClair, color:'#214EA8'},
             {x: 2, y: localStorageMeteoNuageux, color:'green'},
-            {x: 3, y: localStorageMeteoCouvert, color:'red'},
-            {x: 4, y: localStorageMeteoPluvieux, color:'orange'},
-            {x: 5, y: localStorageMeteoBrumeux, color:'purple'},
-            {x: 6, y: localStorageMeteoNeigeux, color:'brown'},
-            {x: 7, y: localStorageMeteoOrageux, color:'yellow'},
-            {x: 8, y: localStorageMeteoTempetueux, color:'pink'}
+            {x: 3, y: localStorageMeteoCouvert, color:'#08C6E0'},
+            {x: 4, y: localStorageMeteoPluvieux, color:'#00A288'},
+            {x: 5, y: localStorageMeteoBrumeux, color:'#086AE0'},
+            {x: 6, y: localStorageMeteoNeigeux, color:'#00879A'},
+            {x: 7, y: localStorageMeteoOrageux, color:'#22E09A'},
+            {x: 8, y: localStorageMeteoTempetueux, color:'#29C62F'}
         ]
 
         const chartMeteo = <ChartTypeMeteo data={data}/>
@@ -607,24 +625,33 @@
         function ChartTrafic({data}) {
         return (
             <div>
-                <p><strong>Les exercices de stationnement réalisés :</strong></p>
-                <XYPlot width={400} height={300}>
+                <h2>Les exercices de stationnement réalisés</h2>
+                <RadialChart
+                data={datastationnement}
+                width={400}
+                height={300}>
                     <DiscreteColorLegend 
                             orientation="horizontal"
                             items={[
-                                {title: 'Trafic faible', color: 'blue'},
-                                {title: 'Trafic modéré', color: 'pink'},
-                                {title: 'Trafic fort', color: 'red'},
-                                {title: 'Trafic fluctuant', color: 'green'}
+                                {title: `Trafic faible : ${localStorageTraficFaible}`, color: '#214EA8'},
+                                {title: `Trafic modéré : ${localStorageTraficModere}`, color: '#00A288'}
+                            ]}
+                        />
+                        <DiscreteColorLegend 
+                            orientation="horizontal"
+                            items={[
+                                {title: `Trafic fort : ${localStorageTraficFort}`, color: '#29C62F'},
+                                {title: `Trafic fluctuant : ${localStorageTraficFluctuant}`, color: '#52EA00'}
                             ]}
                         />
                     <ArcSeries 
                         data={data} 
-                        colorDomain={[0, 1, 2, 3]} 
-                        colorRange={['blue', 'pink', 'red', 'green']} 
+                        colorDomain={[0, 1, 2, 3, 4, 5, 6]} 
+                        colorRange={['#214EA8', '#00A288', '#29C62F']} 
+                        colorType='linear'
                         />
-                        <LabelSeries data={data.map(item => ({ ...item, label: item.label }))} />
-                </XYPlot>
+                        
+                </RadialChart>
             </div>
         )
         }
@@ -658,34 +685,29 @@
                 angle: (localStorageTraficFaible / totalTrafic) * Math.PI * 2,
                 radius: camembertRadius,
                 color: 0,
-                label: `${localStorageTraficFaible} conduites en trafic faible`
             },
             {
                 angle0: (localStorageTraficFaible / totalTrafic) * Math.PI * 2,
                 angle: ((localStorageTraficFaible + localStorageTraficModere) / totalTrafic) * Math.PI * 2,
                 radius: camembertRadius,
                 color: 1,
-                label: `${localStorageTraficModere} conduites en trafic modéré`
             },
             {
                 angle0: ((localStorageTraficFaible + localStorageTraficModere) / totalTrafic) * Math.PI * 2,
                 angle: ((localStorageTraficFaible + localStorageTraficModere + localStorageTraficFort) / totalTrafic) * Math.PI * 2,
                 radius: camembertRadius,
                 color: 2,
-                label: `${localStorageTraficFort} conduites en trafic fort`
             },
             {
                 angle0: ((localStorageTraficFaible + localStorageTraficModere + localStorageTraficFort) / totalTrafic) * Math.PI * 2,
                 angle: Math.PI * 2,
                 radius: camembertRadius,
                 color: 3,
-                label: `${localStorageTraficFluctuant} conduites en trafic fluctuant`
             }
         ]
 
         const chartTrafic = <ChartTrafic data={datatrafic}/>;
         ReactDOM.render(chartTrafic, document.querySelector('#root-trafic'));
-        
 
     </script>
 
@@ -814,12 +836,41 @@
             width: 400px;
             height: 10vh;
             background-color: rgb(33,78,168);
-            margin-top: 120px; /*Rajout de la marge pour une question d'erreur avec le pied de graphiques */
         }
         
         div.root{ /*rajout de la marge pour les pieds de graphique*/
-            margin-top:120px;
-            margin-bottom: 120px;
+            margin-bottom: 140px;
+            width:400px;
+        }
+
+        div.root::before{ /*rajout de before pour séparer les graphiques*/
+            content:"";
+            height:2px;
+            border: solid 1px #214EA8;
+            background-color:#214EA8;
+            width:30%;
+            margin:auto;
+            display: block;
+            margin-bottom: 40px;
+        }
+
+        div.no-root{ /*Annuler margin-bottom trop grande */
+            margin-bottom: 10px;
+        }
+
+        div.root h2{
+            text-align: center;
+            font-size: 1.1em;
+            line-height: 1.3em;
+            color:black;
+        }
+
+        div.rv-discrete-color-legend-item svg path{ /*Agrandir la couleur des légendes */
+            stroke-width:10px;
+        }
+
+        div.rv-discrete-color-legend-item span{ /*Agrandir le texte*/
+            font-size: 1.2em;
         }
         
         .form-grid {
@@ -944,7 +995,7 @@
     </aside>
   
         <section class="root">
-            <div id="root-km" class="root">
+            <div id="root-km" class="root no-root">
 
             </div>
             <div id="root-stationnement" class="root">
@@ -959,6 +1010,7 @@
             <div id="root-trafic" class="root">
 
             </div>
+            
         </section>
         <footer>
             <div id="contactCell"><span>Uniconduite <br><br>
