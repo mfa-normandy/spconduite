@@ -263,7 +263,6 @@
             <li>Dates et heures de départ et d'arrivée</li>
             <li>Conditions de route</li>
         </ul>
-        <h2></h2>
         <?php
             include("connectDBclass.inc.php");
         ?>
