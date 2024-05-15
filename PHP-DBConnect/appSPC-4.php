@@ -1,3 +1,6 @@
+<?php
+    include("connectDBclass.inc.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -264,7 +267,7 @@
             <li>Conditions de route</li>
         </ul>
         <?php
-            include("connectDBclass.inc.php");
+            echo $mysqliOk;
         ?>
         <form id="formulaire">
             <fieldset id="time" class="form-grid">
