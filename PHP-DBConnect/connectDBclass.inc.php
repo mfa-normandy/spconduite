@@ -14,6 +14,8 @@ ini_set("display_errors",1);
 
 $mysqliObject=new mysqli($host,$user,$passwd,$db);
 
+$mysqliOk="";
+
 
 //var_dump($mysqliObject);
 
@@ -28,7 +30,7 @@ if($mysqliObject->connect_errno){
 	echo "Error N° ".$mysqliObject->connect_errno." , Msg : ".$mysqliObject->connect_error."<br>";
 	exit();
 } else {
-	echo "<span style=\"color:green;\">Connected to the database ".$db." on the server ".$host." with success</span><br>";
+	$mysqliOk="<span style=\"color:green;\">Connected to the database ".$db." on the server ".$host." with success</span><br>";
 }
 
 //procedural : mysqli_set_charset()

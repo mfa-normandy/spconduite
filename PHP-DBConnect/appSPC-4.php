@@ -1,3 +1,7 @@
+<?php
+    include("connectDBclass.inc.php");
+    include("ajoutListesChoix.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -264,7 +268,7 @@
             <li>Conditions de route</li>
         </ul>
         <?php
-            include("connectDBclass.inc.php");
+            echo $mysqliOk;
         ?>
         <form id="formulaire">
             <fieldset id="time" class="form-grid">
@@ -296,6 +300,12 @@
                 
                 <label for="route">Type de route</label>
                 <select name="route" id="route" size="5" required multiple>
+                    <?php
+                        foreach($listeTypeRoute as $typeRoute){
+                            if($typeRoute['actifTypeRoute'] == 1)
+                            echo '<option value="' . $typeRoute['idTypeRoute'] . '">' . $typeRoute['nomTypeRoute'] . '</option>';
+                        };
+                    ?>
                     <!--   <option value="1">Nationale</option>
                     <option value="2">Départementale</option>
                     <option value="3">Autoroute</option>
@@ -305,6 +315,12 @@
                 
                 <label for="trafic">Type de trafic</label>
                 <select name="trafic" id="trafic" size="4" required>
+                    <?php
+                        foreach($listeTypeTrafic as $typeTrafic){
+                            if($typeTrafic['actifTypeTrafic'] == 1)
+                            echo '<option value="' . $typeTrafic['idTypeTrafic'] . '">' . $typeTrafic['nomTypeTrafic'] . '</option>';
+                        };
+                    ?>
                     <!--    <option value="1">Faible</option>
                     <option value="2">Modéré</option>
                     <option value="3">Fort</option>
