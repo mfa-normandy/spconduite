@@ -1,8 +1,9 @@
 <?php
     include_once("connectDBclass.inc.php");
     include_once("ajoutListesChoix.php");
-    
+    include_once("recupererResultat.php")
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,7 +40,8 @@
             );
         }
     </script>
-    
+
+
     <style>
         * {    
             box-sizing: border-box;
@@ -67,7 +69,6 @@
             font-size: 0.8em;
             text-align: center;
             height: auto;
-            
         }
         /*
         nav {
@@ -102,7 +103,6 @@
             height: 95%;
             display: flex;
             justify-content: right;
-            
         }
 
         nav div span {
@@ -143,7 +143,7 @@
             height: 120px;  /*REGLE LE PROBLEME D'IMAGE*/
         }
         
-        #newsheet {
+        #stats {
             background-color: rgb(255, 255, 255);
             color: rgb(33, 78, 168);
         }
@@ -168,7 +168,40 @@
             background-color: rgb(33,78,168);
         }
         
-        
+        div.root{ /*rajout de la marge pour les pieds de graphique*/
+            margin-bottom: 140px;
+            width:400px;
+        }
+
+        div.root::before{ /*rajout de before pour séparer les graphiques*/
+            content:"";
+            height:1px;
+            border: solid 1px #214EA8;
+            background-color:#214EA8;
+            width:30%;
+            margin:auto;
+            display: block;
+            margin-bottom: 40px;
+        }
+
+        div.no-root{ /*Annuler margin-bottom trop grande */
+            margin-bottom: 10px;
+        }
+
+        div.root h2{
+            text-align: center;
+            font-size: 1.1em;
+            line-height: 1.3em;
+            color:black;
+        }
+
+        div.rv-discrete-color-legend-item svg path{ /*Agrandir la couleur des légendes */
+            stroke-width:10px;
+        }
+
+        div.rv-discrete-color-legend-item span{ /*Agrandir le texte*/
+            font-size: 1.2em;
+        }
         .form-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -263,6 +296,9 @@
             color:white;
         }
 
+        #root-kmAgg .rv-xy-plot__grid-lines__line {
+            stroke: blue !important;
+        }
 
     </style>
 </head>
@@ -277,125 +313,24 @@
                 <span id="login">Log In</span>
             </div>
             <div>
-                <a href="appSPC-4.html"><span id="newsheet"><strong> Créer une fiche de conduite</strong></span></a>
+                <a href="appSPC-php.php"><span id="newsheet"><strong> Créer une fiche de conduite</strong></span></a>
             </div>
             <div>
-                <a href="appSPC-4A-OAI.html"><span id="stats">Dashboard stastistiques</span></a>
+                <a href="appSPC-php-results.php"><span id="stats">Dashboard stastistiques</span></a>
             </div>
         </div>
     </nav>
     <aside>
         <img id="resp-400-image" src="./car.png" alt="Logo" width="400" height="120">
         
-        <h1>Renseignez vos informations de sortie conduite</h1>
+        <h1>Résumé de vos experiences de conduite</h1>
     </aside>
-    <article>Renseignez les données de votre sortie dans le formulaire ci-dessous <br>
-        <ul>
-            <li>Kilomètres parcourus</li>
-            <li>Dates et heures de départ et d'arrivée</li>
-            <li>Conditions de route</li>
-        </ul>
-        <?php
-            echo $mysqliOk;
-        ?>
-        <form id="formulaire" action="envoiFormulaire.php" method="post">
-            <fieldset id="time" class="form-grid">
-                <label for="date">Date départ</label>
-                <input type="date" id="date" name="date" required>  
-                <label for="heure">Heure départ</label>
-                <input type="time" id="heure" name="heure" required> 
-                <label for="dateR">Date retour</label>
-                <input type="date" id="dateR" name="dateR" required>  
-                <label for="heureR">Heure retour</label>
-                <input type="time" id="heureR" name="heureR" required> 
-            </fieldset>
-            <fieldset id="distance" class="form-grid">
-                <label for="km">Kilomètres</label>
-                <input type="text" id="km" name="km" pattern="\d+" required>
-            </fieldset>
-            <fieldset id="conditions" class="form-grid">
-                <label for="meteo">Meteo</label>
-                <select name="meteo" id="meteo" size="8" required>
-                <?php
-                        foreach($listeMeteo as $meteo){
-                            if($meteo['actifMeteo'] == 1)
-                            echo '<option value="' . $meteo['idMeteo'] . '">' . $meteo['nomMeteo'] . '</option>';
-                        };
-                    ?>
-                    <!-- <option value="1">Clair</option>
-                    <option value="2">Nuageux</option>
-                    <option value="3">Couvert</option>
-                    <option value="4">Pluvieux</option>
-                    <option value="5">Brumeux</option>
-                    <option value="6">Neigeux</option>
-                    <option value="7">Orageux</option>
-                    <option value="8">Tempetueux</option> -->
-                </select>
-                
-                <label for="route">Type de route</label>
-                <select name="route[]" id="route" size="5" required multiple>
-                    <?php
-                        foreach($listeTypeRoute as $typeRoute){
-                            if($typeRoute['actifTypeRoute'] == 1)
-                            echo '<option value="' . $typeRoute['idTypeRoute'] . '">' . $typeRoute['nomTypeRoute'] . '</option>';
-                        };
-                    ?>
-                    <!--   <option value="1">Nationale</option>
-                    <option value="2">Départementale</option>
-                    <option value="3">Autoroute</option>
-                    <option value="4">3Centre-ville</option>
-                    <option value="5">Mixte</option>  -->
-                </select>
-                
-                <label for="trafic">Type de trafic</label>
-                <select name="trafic" id="trafic" size="4" required>
-                    <?php
-                        foreach($listeTypeTrafic as $typeTrafic){
-                            if($typeTrafic['actifTypeTrafic'] == 1)
-                            echo '<option value="' . $typeTrafic['idTypeTrafic'] . '">' . $typeTrafic['nomTypeTrafic'] . '</option>';
-                        };
-                    ?>
-                    <!--    <option value="1">Faible</option>
-                    <option value="2">Modéré</option>
-                    <option value="3">Fort</option>
-                    <option value="4">Fluctuant</option> -->
-                </select>
-            </fieldset>
-            <fieldset id="manoeuvres" class="form-grid">
-                <label for="manoeuvre">Manoeuvres réalisées</label>
-                <select name="manoeuvre[]" id="manoeuvre" size="3" required multiple>
-                    <?php
-                        foreach($listeTypeManoeuvres as $typeManoeuvre){
-                            if($typeManoeuvre['actifManoeuvre'] == 1)
-                            echo '<option value="' . $typeManoeuvre['idManoeuvre'] . '">' . $typeManoeuvre['nomManoeuvre'] . '</option>';
-                        };
-                    ?>
-                    <!--  
-                    <option value="1">  Stationnement en épi</option>
-                    <option value="1"> Stationnement en bataille</option>
-                    <option value="1">  Stationnement en créneau</option> -->
-                </select>            
-            </fieldset>
-            <div class="no-grid">
-                <br>
-                <input type="submit" value="Enregister">
-                <br>
-            </div>
-            </form>
-            
-            <!-- <script>
-                
-                
-            </script> -->
-            
-        </article>
-        <section>
-
-        </section>
+    <article>
         <footer>
             <div id="contactCell"><span>Uniconduite <br><br>
                 Copyright 2024 - UNISTRA<br> <a href="mailto:info@ecoleoscar.com">info@uniconduite.com</a></span>
             </div>
         </footer>
-    </body>
-    </html>
+    </article>
+</body>
+</html>

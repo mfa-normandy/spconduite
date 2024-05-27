@@ -73,7 +73,7 @@ foreach($typeRoute as $route){ //On fait des requêtes spécifiques pour aliment
 
 };
 
-header('Location:appSPC-4.php'); // Permet d'aller sur une page en particulier une fois tout ce code exécuté
+header('Location:appSPC-php.php'); // Permet d'aller sur une page en particulier une fois tout ce code exécuté
 
 exit();
 
