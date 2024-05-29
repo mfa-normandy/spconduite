@@ -59,10 +59,6 @@
     $mapTypeRoute = array_column($nomTypeRoute, 'nomTypeTrafic', 'idTypeTrafic');
     $mapTypeTrafic = array_column($nomTypeTrafic, 'idTypeTrafic', 'nomTypeTrafic');
 
-    echo "<pre>";
-    print_r($resultats);
-    echo "</pre>";
-
 
     class Resultat{
         public $idTrajet;
@@ -104,13 +100,6 @@
         );
     }
 
-    echo "<ul>";
-    foreach($trajets as $trajet){
-        echo "<li>";
-        echo "ID trajet : " . $trajet->idTrajet . ", ";
-        echo "Kilometrage trajet : " . $trajet->kilometrage;
-        echo "</li>";
-    };
-    echo "</ul>"
+    
 
 ?>
