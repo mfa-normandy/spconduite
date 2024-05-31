@@ -1,0 +1,632 @@
+body{
+    background-image: url("../img/fond.png");
+}
+
+:root{
+    --primary-color:#17212b;
+    --white-color:#f0f8ff;
+    --secondary-color:#e67e22;
+    --secondary-hoover-color: #d9761f;
+    --highlight-color: #3ca4ff ;
+    --highlight-transparent-color: rgba(60, 164, 255, 0.5);
+    --ok-color:#1abc9c;
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: "Montserrat";
+    font-weight: 400;
+    src: url("../fonts/Montserrat-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Montserrat";
+    font-weight: 500;
+    src: url("../fonts/Montserrat-Medium.ttf");
+}
+
+@font-face {
+    font-family: "Montserrat";
+    font-weight: 600;
+    src: url("../fonts/Montserrat-SemiBold.ttf");
+}
+
+@font-face {
+    font-family: "Lato";
+    font-weight: 400;
+    src: url("../fonts/Lato-Regular.ttf");
+}
+
+.hidden{
+    display: none;
+}
+
+h1, h2, h3, a{
+    font-family: "Montserrat", sans-serif;
+    color:var(--primary-color);
+}
+
+h2{
+    margin-top: 20px;
+}
+
+p, label, table{
+    font-family: "Lato", sans-serif;
+    color:var(--primary-color);
+}
+
+button{
+    background-color:var(--secondary-color);
+    border:none;
+    border-radius: 5px;
+}
+/**********************************************************
+***********************************************************
+*********************** HEADER ****************************
+***********************************************************
+**********************************************************/
+
+header{
+    background-color: var(--primary-color);
+    min-height: 150px;
+}
+
+header div, footer div:first-child{
+    width: 80%;
+    height: 150px;
+    column-gap: 50px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+header span{
+    color: var(--white-color);
+    font-size: 1.5em;
+}
+
+header div ul{
+    display: flex;
+    column-gap: 40px;
+}
+
+header a, footer a{
+    color: var(--white-color);
+    font-size: 1.3em;
+}
+
+header a:hover, footer a:hover{
+    color: var(--highlight-color);
+}
+
+/**********************************************************
+***********************************************************
+*********************** BODY ****************************
+***********************************************************
+**********************************************************/
+
+main{
+    width: 80%;
+    margin:auto;
+}
+
+/*********************************************************
+*************** DIV ACCES FORMULAIRE *********************
+*********************************************************/
+
+.ajouter-experience, .afficherRecap{
+    width: 60%;
+    border-radius: 10px;
+    box-shadow: 8px 8px 8px #17212b;
+    margin: 100px auto 100px auto;
+    background-color: var(--white-color);
+    display: flex;
+    row-gap: 50px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.ajouter-experience h2, .formulaire h2, .ajouter-experience p{
+    text-align: center;
+    width: 80%; 
+}
+
+.ajouter-experience h2, .formulaire h2{
+    font-size: 2em;
+    line-height: 1.7em;
+    
+}
+
+.ajouter-experience p{
+    font-size: 1.3em;
+    line-height: 1.8em;
+}
+
+.ajouter-experience button{
+    width: 50%;
+    margin-bottom:20px;
+}
+
+button img{
+    height: 50px;
+}
+button:hover{
+    background-color: var(--secondary-hoover-color) ;
+}
+
+.envoyee{
+    color:var(--ok-color);
+    font-weight: bold;
+}
+
+.confirmation{
+    width: 50%;
+    margin: auto;
+    margin-top: 20px;
+}
+
+.confirmation img{
+    width: 20%;
+    display: block;
+    height: auto;
+    margin: auto;
+    align-self: center;
+}
+/*********************************************************
+*********************** FORMULAIRE ***********************
+*********************************************************/
+
+section.formulaire{
+    width: 60%;
+    background-color: var(--white-color);
+    border-radius: 10px;
+    box-shadow: 8px 8px 8px #17212b;
+    margin: 100px auto 100px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+section.formulaire form{
+    width: 90%;
+    margin: 30px auto 50px auto;
+    display: flex;
+    flex-direction: column;
+}
+
+section.formulaire fieldset{
+    margin-bottom: 15px;
+}
+
+section.formulaire .deux-colonnes{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
+}
+
+section.formulaire fieldset > *, section.formulaire fieldset div > *{
+    margin: 10px 0px 10px 0px;
+}
+
+section.formulaire h3::before{
+    display: block;
+    height:2px;
+    width: 80%;
+    border-bottom:5px dotted var(--highlight-transparent-color);
+    content:"";
+    margin: auto auto 20px auto;
+}
+
+section.formulaire h3{
+    grid-column: 1 / 3;
+    text-align: center;
+}
+
+section.formulaire label{
+    text-align: center;
+    font-family: "Lato", sans-serif;
+    font-weight: bold;
+}
+
+section.formulaire input, section.formulaire select{
+    text-align: center;
+    align-self: center;
+    width: 80%;
+    border-radius: 3px;
+    border: 1px solid var(--primary-color);
+}
+
+section.formulaire input:valid, section.formulaire select:valid{
+    border: 2px solid var(--ok-color);
+}
+
+section.formulaire div.centre input{
+    width: 50%;
+    min-width: 100px;
+}
+
+div.gauche{
+    grid-column: 1;
+}
+
+div.droite{
+    grid-column: 2;
+}
+
+section.formulaire div{
+    display: flex;
+    flex-direction: column;
+}
+
+section.formulaire button {
+    width: 50%;
+    margin: auto;
+}
+
+section.formulaire button[name="submit"]:hover{
+    background-color:var(--secondary-hoover-color);
+}
+
+/*********************************************************
+*********************** TABLEAU RECAP ********************
+*********************************************************/
+
+.afficherRecap{
+    min-height: 100px;
+}
+
+.afficherRecap h2{
+    text-align: center;
+}
+
+.afficherRecap table{
+    width: 80%;
+    margin: auto;
+    margin-bottom: 30px;    
+}
+
+.afficherRecap th{
+    font-size: 1.5em;
+}
+
+.afficherRecap th, .afficherRecap td{
+    line-height: 1.5em;
+    font-size: 1.2em;
+    text-align: center;
+    border: 1px solid var(--highlight-transparent-color);
+}
+
+.ligne-recapitulatif{
+    font-weight: bold;
+}
+
+/**********************************************************
+***********************************************************
+*********************** FOOTER ****************************
+***********************************************************
+**********************************************************/
+
+footer{
+    background-color: var(--primary-color);
+    min-height: 250px;
+}
+
+footer span{
+    font-family: "Montserrat", sans-serif;
+    font-size: 2.5em;
+    color:var(--white-color);
+    font-weight: bold;
+}
+
+footer p{
+    color:var(--white-color);
+    text-align: center;
+    font-size: 1.2em;
+    line-height: 2em;
+    font-family: "Lato", sans-serif;
+}
+
+footer div ul{
+    margin-top:50px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    justify-content: space-around;
+    height: 180px;
+}
+
+/**********************************************************
+***********************************************************
+*********************** DASHBOARD *************************
+***********************************************************
+**********************************************************/
+
+section.root > *{
+    width: 90%;
+    height: 100%;
+    margin: auto;
+}
+
+section.resultats{
+    width: 60%;
+    border-radius: 10px;
+    box-shadow: 8px 8px 8px #17212b;
+    margin: 100px auto 100px auto;
+    background-color: var(--white-color);
+    row-gap: 70px;
+    align-items: center;
+    justify-content: space-around;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-bottom: 100px;
+    align-items: start;
+}
+
+section.ai > *{
+    align-self: start;
+    width:80%;
+    margin: auto;
+}
+
+section.ai p{
+    font-size: 1.3em;
+    line-height: 1.8em;
+}
+
+div.deux-colonnes{
+    width:90%;
+    text-align: center;
+    margin: auto;
+    grid-column: 1 / 3;
+}
+
+div.cacher{
+    grid-column: 1/3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+div.cacher p{
+    text-align: center;
+}
+
+div.cacher a{
+    margin-top: 30px;
+}
+
+div.rv-xy-plot{
+    margin: auto;
+}
+
+fieldset.form-grid{
+    display: flex;
+    flex-direction: column;
+}
+
+fieldset.form-grid > *{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+input[type="submit"]{
+    background-color: var(--secondary-color);
+    border: none;
+    border-radius: 3px;
+    width: 30%;
+    height: 50px;
+    color: var(--white-color);
+    font-weight: bold;
+}
+
+input[type="submit"]:hover{
+    background-color: var(--secondary-hoover-color);
+}
+
+
+/**********************************************************************************************************
+***********************************************************************************************************
+*****************************************RESPONSIVE 1300PX ************************************************
+***********************************************************************************************************
+**********************************************************************************************************/
+
+@media only screen and (max-width:1350px) {
+
+    header div.navigation{
+        flex-direction: column;
+        justify-content: space-around;
+    }
+
+    .ajouter-experience, .afficherRecap{
+        width: 90%;
+        min-height: 600px;
+        border-radius: 10px;
+        box-shadow: 8px 8px 8px #17212b;
+        margin: 100px auto 100px auto;
+        background-color: var(--white-color);
+        display: flex;
+        row-gap: 50px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    .confirmation img{
+        width: 40%;
+    }
+
+    section.formulaire{
+        width: 90%;
+        background-color: var(--white-color);
+        border-radius: 10px;
+        box-shadow: 8px 8px 8px #17212b;
+        margin: 100px auto 100px auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    .afficherRecap{
+        min-height: 100px;
+    }
+
+    footer{
+        height: 450px;
+    }
+
+    footer div:first-child{
+        padding-top: 20px;
+        flex-direction: column;
+        height:auto;
+        text-align: center;
+        row-gap: 50px;
+    }
+    
+
+    footer div ul{
+        margin-top: 0px;
+    }
+
+    /**********************************************************
+    ***********************************************************
+    *********************** DASHBOARD *************************
+    ***********************************************************
+    **********************************************************/
+
+    .centrer{
+        width: 70%;
+        height: 100%;
+        margin: auto;
+    }
+
+    section.resultats{
+        width: 90%;
+    }
+
+    fieldset.form-grid{
+        display: flex;
+        flex-direction: column;
+    }
+
+}
+
+/**********************************************************************************************************
+***********************************************************************************************************
+*****************************************RESPONSIVE 800PX ************************************************
+***********************************************************************************************************
+**********************************************************************************************************/
+
+@media only screen and (max-width:800px) {
+
+    header span{
+        color: var(--white-color);
+        font-size: 1em;
+    }
+
+    header a, footer a{
+        color: var(--white-color);
+        font-size: 1em;
+    }
+
+    .confirmation img{
+        width: 60%;
+    }
+
+    .ajouter-experience h2, .formulaire h2{
+        font-size: 1.5em;
+        line-height: 1.5em;
+        
+    }
+    
+    .ajouter-experience p, table{
+        font-size: 1em;
+        line-height: 1.8em;
+    }
+
+    footer span{
+        font-family: "Montserrat", sans-serif;
+        font-size: 2em;
+        color:var(--white-color);
+        font-weight: bold;
+    }
+    
+    footer p{
+        color:var(--white-color);
+        text-align: center;
+        font-size: 1em;
+        line-height: 2em;
+        font-family: "Lato", sans-serif;
+    }
+
+    section.formulaire .deux-colonnes{
+        grid-template-columns: 1fr;
+    }
+
+    section.formulaire div.gauche{
+        grid-column: 1;
+    }
+    
+    section.formulaire div.droite{
+        grid-column: 1;
+    }
+
+    section.formulaire div.centre input{
+        width: 80%;
+        min-width: 100px;
+    }
+    
+    .afficherRecap table{
+        width: 95%;
+    }
+    
+    .afficherRecap th{
+        font-size: 1.5em;
+    }
+    
+    .afficherRecap th, .afficherRecap td{
+        line-height: 3em;
+        font-size: 0.9em;
+    }
+
+    /**********************************************************
+    ***********************************************************
+    *********************** DASHBOARD *************************
+    ***********************************************************
+    **********************************************************/
+
+    section.root > *{
+        margin-bottom: 50px;
+    }
+
+    section.resultats{
+        grid-template-columns: 1fr;
+    }
+
+    section.ai{
+        width: 90%;
+    }
+
+    section.resultats h2{
+        grid-column: 1;
+        font-size: 1.2em;
+        line-height: 1.5em;
+    }
+
+    div.droite{
+        grid-column: 1;
+    }
+
+    section.resultats div.deux-colonnes{
+        grid-column: 1;
+    }
+
+    section.resultats form{
+        width: 100%;
+        margin: auto;
+    }
+
+}
