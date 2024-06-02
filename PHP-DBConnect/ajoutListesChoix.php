@@ -23,6 +23,24 @@
 
     $listeTypeTrafic = $resultTypeTrafic->fetch_all(MYSQLI_ASSOC);
 
-    
+    //Ensuite les TYPES DE METEO
+
+    $retrieveListeMeteo = $mysqliObject->prepare('SELECT idMeteo, nomMeteo, actifMeteo FROM Meteo');
+
+    $retrieveListeMeteo->execute();
+
+    $resultMeteo = $retrieveListeMeteo->get_result();
+
+    $listeMeteo = $resultMeteo->fetch_all(MYSQLI_ASSOC);
+
+    //Ensuite les TYPES DE MANOEUVRES
+
+    $retrieveListeTypeManoeuvres = $mysqliObject->prepare('SELECT idManoeuvre, nomManoeuvre, actifManoeuvre FROM Manoeuvres');
+
+    $retrieveListeTypeManoeuvres->execute();
+
+    $resultTypeManoeuvres = $retrieveListeTypeManoeuvres->get_result();
+
+    $listeTypeManoeuvres = $resultTypeManoeuvres->fetch_all(MYSQLI_ASSOC);
 
 ?>
