@@ -26,33 +26,7 @@ if (isset($_SESSION['mysqliOk'])) {
     <link href="https://fonts.googleapis.com/css2?family=David+Libre:wght@500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <script>
-        window.onload = function () {
-            //Selectionner plusieurs manoeuvres
-            var select = document.getElementById('manoeuvre');
-            select.addEventListener('mousedown', function (e) {
-                e.preventDefault();
-                var select = this;
-                var index = Array.from(select.options).indexOf(e.target);
-                if (e.target.tagName.toLowerCase() !== 'option' || index === -1) return;
-                select.options[index].selected = !select.options[index].selected;
-                return false;
-            }
-            );
-
-            //Selectionner plusieurs types de routes
-            var select = document.getElementById('route');
-            select.addEventListener('mousedown', function (e) {
-                e.preventDefault();
-                var select = this;
-                var index = Array.from(select.options).indexOf(e.target);
-                if (e.target.tagName.toLowerCase() !== 'option' || index === -1) return;
-                select.options[index].selected = !select.options[index].selected;
-                return false;
-            }
-            );
-        }
-    </script>
+    
 </head>
 
 <body>
@@ -114,23 +88,6 @@ if (isset($_SESSION['mysqliOk'])) {
                     <option value="7">Orageux</option>
                     <option value="8">Tempetueux</option> -->
                 </select>
-
-                <label for="route">Type de route</label>
-                <select name="route[]" id="route" size="<?php if (isset($listeTypeRoute)) {echo count($listeTypeRoute);} ?>" required multiple>
-                    <?php
-                    foreach ($listeTypeRoute as $typeRoute) {
-                        if ($typeRoute['actifTypeRoute'] == 1)
-                            echo '<option value="' . $typeRoute['idTypeRoute'] . '">' . $typeRoute['nomTypeRoute'] . '</option>';
-                    }
-                    ;
-                    ?>
-                    <!--   <option value="1">Nationale</option>
-                    <option value="2">Départementale</option>
-                    <option value="3">Autoroute</option>
-                    <option value="4">3Centre-ville</option>
-                    <option value="5">Mixte</option>  -->
-                </select>
-
                 <label for="trafic">Type de trafic</label>
                 <select name="trafic" id="trafic" required>
                     <?php
@@ -145,23 +102,45 @@ if (isset($_SESSION['mysqliOk'])) {
                     <option value="3">Fort</option>
                     <option value="4">Fluctuant</option> -->
                 </select>
-            </fieldset>
-            <fieldset id="manoeuvres" class="form-grid">
-                <label for="manoeuvre">Manoeuvres réalisées</label>
-                <select name="manoeuvre[]" id="manoeuvre" size="<?php if (isset($listeTypeManoeuvres)) {echo count($listeTypeManoeuvres);} ?>" required multiple>
+
+                <div class="checkbox-container">
+                    <br>
+                    <label for="route">Type de route</label>
                     <?php
-                    foreach ($listeTypeManoeuvres as $typeManoeuvre) {
-                        if ($typeManoeuvre['actifManoeuvre'] == 1)
-                            echo '<option value="' . $typeManoeuvre['idManoeuvre'] . '">' . $typeManoeuvre['nomManoeuvre'] . '</option>';
+                    if (isset($listeTypeRoute)) {
+                        foreach ($listeTypeRoute as $typeRoute) {
+                            if ($typeRoute['actifTypeRoute'] == 1) {
+                                echo '<div>';
+                                echo '<input type="checkbox" id="route' . $typeRoute['idTypeRoute'] . '" name="route[]" value="' . $typeRoute['idTypeRoute'] . '">';
+                                echo '<label for="route' . $typeRoute['idTypeRoute'] . '">' . $typeRoute['nomTypeRoute'] . '</label>';
+                                echo '</div>';
+                            }
+                        }
                     }
-                    ;
                     ?>
-                    <!--  
-                    <option value="1">  Stationnement en épi</option>
-                    <option value="1"> Stationnement en bataille</option>
-                    <option value="1">  Stationnement en créneau</option> -->
-                </select>
+                </div>  
+                <div class="checkbox-container">
+                    <br>
+                    <label for="manoeuvre">Type de manoeuvre</label>
+                    <?php
+                    
+                    if (isset($listeTypeManoeuvres)) {
+                    foreach ($listeTypeManoeuvres as $typeManoeuvre) {
+                        //print_r ($typeManoeuvre);
+                        if ($typeManoeuvre['actifManoeuvre'] == 1) {
+                            echo '<div>';
+                            echo '<input type="checkbox" id="manoeuvre' . $typeManoeuvre['idManoeuvre'] . '" name="manoeuvre[]" value="' . $typeManoeuvre['idManoeuvre'] . '">';
+                            echo '<label for="manoeuvre' . $typeManoeuvre['idManoeuvre'] . '">' . $typeManoeuvre['nomManoeuvre'] . '</label>';
+                            echo '</div>';
+                        }
+                    }
+                }
+                    ?>
+                </div>             
+
+                
             </fieldset>
+            
             <div class="no-grid">
                 <br>
                 <input type="submit" value="Sauvegarder" id="submit-button">

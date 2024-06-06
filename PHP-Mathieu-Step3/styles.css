@@ -25,7 +25,28 @@ textarea,
 select,
 #submit-button {
     font-size: clamp(1.1rem, 2vw, 1.4rem);
+    
 }
+
+.checkbox-container {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.checkbox-container input[type="checkbox"] {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    width: 20px;
+    height: 20px;
+    
+}
+
+.checkbox-container label {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+}
+
+
 
 #submit-button {
     padding: 5px 5px;
