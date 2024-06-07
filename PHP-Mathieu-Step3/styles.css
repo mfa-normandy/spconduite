@@ -1,0 +1,338 @@
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    height: 100vh;
+    /* Subtract double the gridgap from the height */
+    width: auto;
+    /* Subtract double the gridgap from the width */
+    max-width: 1000px;
+    /* margin:10px;*/
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+    /*grid-gap:15px;*/
+    font-size: clamp(1.1rem, 2vw, 1.7rem);
+}
+
+input,
+textarea,
+select,
+#submit-button {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    
+}
+
+.checkbox-container {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.checkbox-container input[type="checkbox"] {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    width: 20px;
+    height: 20px;
+    
+}
+
+.checkbox-container label {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+}
+
+
+
+#submit-button {
+    padding: 5px 5px;
+}
+
+header {
+    grid-column: 1;
+    grid-row: 1;
+    width: auto;
+    padding: 5px;
+    background-color: rgb(33, 78, 168);
+    color: white;
+    font-family: David Libre, sans-serif;
+    font-size: clamp(0.5rem, 3vw, 2rem);
+    text-align: center;
+    height: auto;
+    max-width: 100%;
+    margin-top: 0;
+}
+
+/*
+nav {
+    grid-column: 1;
+    grid-row: 2;
+    width: 400px;
+    background-color: rgb(33,78,168);
+    padding-right: 5px;
+    padding-bottom: 5px;
+    text-align: right;
+}
+nav table { 
+    width: 400px;
+    height: 100%;
+}
+*/
+
+nav {
+    grid-column: 1;
+    grid-row: 2;
+    width: auto;
+    max-width: 100%;
+    background-color: rgb(33, 78, 168);
+    padding-right: 5px;
+    padding-bottom: 5px;
+    text-align: right;
+    display: flex;
+    /* Add this line to make the nav a flex container */
+    flex-direction: column;
+    /* Add this line if you want the items to stack vertically */
+}
+
+nav div {
+    /* Replaced 'table' with 'div' */
+    width: auto;
+    height: 95%;
+    display: flex;
+    justify-content: right;
+    margin-bottom: 5px;
+    max-width: 100%;
+}
+
+nav div span {
+    text-align: center;
+    background-color: rgb(33, 78, 168);
+    color: white;
+    font-family: sans-serif;
+    font-size: clamp(0.5rem, 2.7vw, 1.5rem);
+    padding: 5px;
+    margin: 2px;
+    border: 1px solid white;
+    border-radius: 5px;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+}
+
+aside {
+    grid-column: 1;
+    grid-row: 3;
+    position: relative;
+    width: auto;
+    max-width: 100%;
+    display: flex;
+    /* Add this */
+    justify-content: center;
+    /* Add this */
+    align-items: center;
+    /* Add this */
+    flex-direction: column;
+    /* Add this */
+    background-color: rgb(33, 78, 168);
+    
+}
+
+aside h1 {
+    /* Remove position, top, margin-left, margin-right, and transform */
+    color: rgb(255, 255, 255);
+    /* adjust as needed */
+    background-color: rgb(33, 78, 168);
+    opacity: 0.7;
+    width: auto;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: clamp(0.5rem, 3vw, 1.5rem);
+    padding: 5px;
+    max-width: 100%;
+    
+}
+
+/*
+aside img {
+    margin-top: 5px;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+}*/
+
+#resp-400-image {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    max-width: 100%;
+    height: 0;
+    padding-bottom: 33%;
+    /* This will give a aspect ratio of 4:3 (adjust as needed) */
+}
+form {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+.no-grid {
+    display: flex;
+    text-align: top;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+#newsheet {
+    background-color: rgb(255, 255, 255);
+    color: rgb(33, 78, 168);
+}
+
+
+article {
+    grid-column: 1;
+    grid-row: 4;
+    padding: 5px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+
+footer {
+    /* grid-column: 1; */
+    grid-row: 7;
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: clamp(1rem, 2.1vw, 2rem);
+    padding: 15px;
+    width: auto;
+    height: auto;
+    background-color: rgb(33, 78, 168);
+    max-width: 100%;
+    
+}
+
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    gap: 5px;
+    width: auto;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+label {
+    grid-column: 1;
+    height: auto;
+}
+
+input {
+    grid-column: 2;
+    height: auto;
+}
+
+input:valid,
+select:valid {
+    border: 2px solid green;
+}
+
+input:invalid,
+select:invalid {
+    border: 2px solid rgb(255, 162, 0);
+}
+
+input[type="submit"] {
+    background-color: rgb(33, 78, 168);
+    color: white;
+    border: 1px solid rgb(33, 78, 168);
+    border-radius: 5px;
+    padding: 10px 20px;
+    /* adjust as needed */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    /* adjust as needed */
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+fieldset {
+    border: 1px solid rgb(167, 193, 245);
+    border-radius: 5px;
+    padding: 10px;
+    margin: 1px;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
+
+/*A modifier pour que ça s'adapte bien avec le bandeau */
+#TotalKm {
+    text-align: center;
+    font-weight: bold;
+}
+
+/*Ma proposition d'ajout : transformer le texte fin d'ul en un titre h2 pour + de visibilité*/
+h2 {
+    color: rgb(33, 78, 168);
+    font-size: 1.2em;
+}
+
+/*Gérer le tableau récapitulatif de ce qui a été réalisé comme trajets */
+section {
+    grid-row: 5;
+}
+
+section table {
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+table th,
+table td,
+table tr {
+    width: auto;
+    text-align: center;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table td {
+    border: solid 1px black;
+}
+
+table tr th {
+    border: solid 1px black;
+}
+
+.ligne-recapitulatif {
+    border: solid 1px black;
+    text-align: center;
+    background-color: rgb(33, 78, 168);
+    color: white;
+}
